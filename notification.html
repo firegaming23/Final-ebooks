@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FireLEARN | Notifications</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #4cc9f0;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --dark: #121826;
+            --darker: #0a0e17;
+            --light: #f8f9fa;
+            --light-gray: #e9ecef;
+            --gray: #6c757d;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            --card-hover-shadow: 0 15px 35px rgba(67, 97, 238, 0.25);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--darker);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(67, 97, 238, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(114, 9, 183, 0.1) 0%, transparent 20%);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(18, 24, 38, 0.9);
+            backdrop-filter: blur(12px);
+            padding: 18px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .logo-area .title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 8px 0;
+            transition: var(--transition);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--danger);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--light);
+            transition: var(--transition);
+            font-size: 18px;
+            position: relative;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Notification Page */
+        .notification-page {
+            display: flex;
+            padding: 30px 0;
+            gap: 30px;
+        }
+
+        .notification-sidebar {
+            flex: 0 0 280px;
+            background: rgba(26, 32, 51, 0.7);
+            border-radius: 20px;
+            padding: 25px;
+            height: fit-content;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .notification-filters h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-item:hover, .filter-item.active {
+            background: rgba(67, 97, 238, 0.2);
+        }
+
+        .filter-item i {
+            width: 24px;
+            text-align: center;
+        }
+
+        .filter-item.active {
+            color: var(--accent);
+        }
+
+        .notification-main {
+            flex: 1;
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .notification-header h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(to right, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .notification-actions .btn {
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .notification-actions .btn:hover {
+            background: var(--primary);
+        }
+
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .notification-card {
+            background: rgba(26, 32, 51, 0.7);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .notification-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 5px;
+            background: var(--primary);
+            border-radius: 5px 0 0 5px;
+        }
+
+        .notification-card.unread {
+            background: rgba(26, 32, 51, 0.9);
+            border: 1px solid rgba(67, 97, 238, 0.3);
+        }
+
+        .notification-card.unread::before {
+            background: var(--accent);
+        }
+
+        .notification-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .system { background: rgba(76, 201, 240, 0.15); color: var(--accent); }
+        .update { background: rgba(67, 97, 238, 0.15); color: var(--primary); }
+        .alert { background: rgba(244, 67, 54, 0.15); color: var(--danger); }
+        .success { background: rgba(76, 175, 80, 0.15); color: var(--success); }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .notification-time {
+            color: var(--gray);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .notification-message {
+            color: var(--light-gray);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .notification-actions .action-btn {
+            padding: 6px 15px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .notification-actions .action-btn:hover {
+            background: var(--primary);
+        }
+
+        .notification-actions .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .notification-actions .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Notification toast */
+        .notification-toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 350px;
+            background: rgba(26, 32, 51, 0.95);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(67, 97, 238, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateX(120%);
+            transition: transform 0.5s ease;
+            z-index: 1000;
+        }
+
+        .notification-toast.show {
+            transform: translateX(0);
+        }
+
+        .notification-toast::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 5px;
+            background: var(--accent);
+            border-radius: 5px 0 0 5px;
+        }
+
+        .toast-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .toast-close:hover {
+            color: var(--light);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .notification-page {
+                flex-direction: column;
+            }
+            
+            .notification-sidebar {
+                flex: 1;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px;
+            }
+            
+            .notification-toast {
+                width: 300px;
+                right: 15px;
+                bottom: 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .notification-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .notification-card {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .notification-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .notification-toast {
+                width: calc(100% - 30px);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .unread-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin-left: 8px;
+        }
+        
+        .no-notifications {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--light-gray);
+        }
+        
+        .no-notifications i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--gray);
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo-area">
+            <div class="logo">FL</div>
+            <div class="title">FireLEARN</div>
+        </div>
+        
+        <nav class="nav-links">
+            <a href="#"><i class="fas fa-home"></i> Home</a>
+            <a href="#"><i class="fas fa-book"></i> Library</a>
+            <a href="#"><i class="fas fa-graduation-cap"></i> Courses</a>
+            <a href="#"><i class="fas fa-chart-line"></i> Resources</a>
+            <a href="#"><i class="fas fa-users"></i> Community</a>
+        </nav>
+        
+        <div class="header-actions">
+            <div class="notification-bell">
+                <i class="fas fa-bell"></i>
+                <span class="notification-count">5</span>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">JS</div>
+                <span>John Smith</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Notification Page -->
+    <div class="container">
+        <div class="notification-page">
+            <!-- Sidebar -->
+            <div class="notification-sidebar">
+                <div class="notification-filters">
+                    <h2>Filters</h2>
+                    <div class="filter-item active" data-filter="all">
+                        <i class="fas fa-inbox"></i>
+                        <span>All Notifications</span>
+                    </div>
+                    <div class="filter-item" data-filter="unread">
+                        <i class="fas fa-envelope"></i>
+                        <span>Unread <span class="unread-dot"></span></span>
+                    </div>
+                    <div class="filter-item" data-filter="important">
+                        <i class="fas fa-star"></i>
+                        <span>Important</span>
+                    </div>
+                    <div class="filter-item" data-filter="course">
+                        <i class="fas fa-book"></i>
+                        <span>Course Updates</span>
+                    </div>
+                    <div class="filter-item" data-filter="community">
+                        <i class="fas fa-users"></i>
+                        <span>Community</span>
+                    </div>
+                    <div class="filter-item" data-filter="alert">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Alerts</span>
+                    </div>
+                </div>
+                
+                <div class="notification-settings" style="margin-top: 30px;">
+                    <h2>Settings</h2>
+                    <div class="filter-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Notification Preferences</span>
+                    </div>
+                    <div class="filter-item" id="dndToggle">
+                        <i class="fas fa-bell-slash"></i>
+                        <span>Do Not Disturb</span>
+                    </div>
+                    <div class="filter-item" id="archiveAllBtn">
+                        <i class="fas fa-archive"></i>
+                        <span>Archive All</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="notification-main">
+                <div class="notification-header">
+                    <h1>Notifications</h1>
+                    <div class="notification-actions">
+                        <button class="btn" id="markAllReadBtn">
+                            <i class="fas fa-check-circle"></i> Mark All as Read
+                        </button>
+                        <button class="btn" id="clearAllBtn">
+                            <i class="fas fa-trash-alt"></i> Clear All
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="notification-list" id="notificationList">
+                    <!-- Notifications will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="notification-toast" id="notificationToast">
+        <button class="toast-close" id="toastCloseBtn">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="notification-icon system pulse" id="toastIcon">
+            <i class="fas fa-bell"></i>
+        </div>
+        <div class="notification-content">
+            <div class="notification-title">
+                <span id="toastTitle">New Notification</span>
+            </div>
+            <p class="notification-message" id="toastMessage">
+                New resources added to your Chemistry course. Check them out now!
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Notification data
+        const notifications = [
+            {
+                id: 1,
+                title: "System Update Available",
+                message: "A new version of FireLEARN is available. Update now for improved performance and new features.",
+                type: "system",
+                time: "10 min ago",
+                unread: true,
+                important: true,
+                actions: [
+                    { text: "Update Now", icon: "fas fa-download", action: "update" },
+                    { text: "Remind Later", icon: "fas fa-clock", action: "remind" }
+                ]
+            },
+            {
+                id: 2,
+                title: "New Course Material",
+                message: "New resources have been added to your 'Advanced Physics' course. Check them out to stay ahead.",
+                type: "update",
+                time: "45 min ago",
+                unread: true,
+                important: false,
+                actions: [
+                    { text: "View Material", icon: "fas fa-external-link-alt", action: "view" }
+                ]
+            },
+            {
+                id: 3,
+                title: "Assignment Submitted",
+                message: "Your assignment for 'Mathematics Module 3' has been successfully submitted. Grading in progress.",
+                type: "success",
+                time: "2 hours ago",
+                unread: false,
+                important: false,
+                actions: []
+            },
+            {
+                id: 4,
+                title: "Payment Reminder",
+                message: "Your premium subscription will expire in 3 days. Renew now to continue uninterrupted access.",
+                type: "alert",
+                time: "5 hours ago",
+                unread: false,
+                important: true,
+                actions: [
+                    { text: "Renew Now", icon: "fas fa-credit-card", action: "renew" }
+                ]
+            },
+            {
+                id: 5,
+                title: "Community Activity",
+                message: "Your question in the Physics forum has 5 new answers from top educators and peers.",
+                type: "update",
+                time: "Yesterday",
+                unread: false,
+                important: false,
+                actions: [
+                    { text: "View Responses", icon: "fas fa-comments", action: "view" }
+                ]
+            },
+            {
+                id: 6,
+                title: "Learning Achievement",
+                message: "Congratulations! You've completed 50 hours of learning on FireLEARN. Keep up the great work!",
+                type: "success",
+                time: "2 days ago",
+                unread: false,
+                important: false,
+                actions: [
+                    { text: "Share", icon: "fas fa-share-alt", action: "share" }
+                ]
+            }
+        ];
+
+        // Initialize the notification system
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const notificationList = document.getElementById('notificationList');
+            const notificationToast = document.getElementById('notificationToast');
+            const notificationCount = document.querySelector('.notification-count');
+            const markAllReadBtn = document.getElementById('markAllReadBtn');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+            const toastCloseBtn = document.getElementById('toastCloseBtn');
+            const notificationBell = document.querySelector('.notification-bell');
+            const archiveAllBtn = document.getElementById('archiveAllBtn');
+            const dndToggle = document.getElementById('dndToggle');
+            const filterItems = document.querySelectorAll('.filter-item');
+            
+            // State variables
+            let currentFilter = 'all';
+            let dndEnabled = false;
+            let unreadCount = notifications.filter(n => n.unread).length;
+            let nextId = 7;
+            
+            // Initialize
+            renderNotifications();
+            updateNotificationCount();
+            
+            // Render notifications based on current filter
+            function renderNotifications() {
+                notificationList.innerHTML = '';
+                
+                let filteredNotifications = [];
+                
+                if (currentFilter === 'all') {
+                    filteredNotifications = [...notifications];
+                } else if (currentFilter === 'unread') {
+                    filteredNotifications = notifications.filter(n => n.unread);
+                } else if (currentFilter === 'important') {
+                    filteredNotifications = notifications.filter(n => n.important);
+                } else {
+                    filteredNotifications = notifications.filter(n => n.type === currentFilter);
+                }
+                
+                if (filteredNotifications.length === 0) {
+                    notificationList.innerHTML = `
+                        <div class="no-notifications">
+                            <i class="fas fa-bell-slash"></i>
+                            <h3>No Notifications</h3>
+                            <p>You don't have any ${currentFilter === 'all' ? '' : currentFilter} notifications at the moment.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                filteredNotifications.forEach(notification => {
+                    const notificationCard = document.createElement('div');
+                    notificationCard.className = `notification-card ${notification.unread ? 'unread' : ''}`;
+                    notificationCard.dataset.id = notification.id;
+                    
+                    notificationCard.innerHTML = `
+                        <div class="notification-icon ${notification.type}">
+                            <i class="${getIconForType(notification.type)}"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">
+                                <span>${notification.title}</span>
+                                <span class="notification-time">${notification.time}</span>
+                            </div>
+                            <p class="notification-message">
+                                ${notification.message}
+                            </p>
+                            ${notification.actions.length > 0 ? `
+                                <div class="notification-actions">
+                                    ${notification.actions.map(action => `
+                                        <button class="action-btn" data-action="${action.action}">
+                                            <i class="${action.icon}"></i> ${action.text}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                    
+                    notificationList.appendChild(notificationCard);
+                });
+                
+                // Add event listeners to notification cards
+                document.querySelectorAll('.notification-card').forEach(card => {
+                    card.addEventListener('click', function(e) {
+                        if (!e.target.closest('.notification-actions')) {
+                            const id = parseInt(this.dataset.id);
+                            markAsRead(id);
+                        }
+                    });
+                });
+                
+                // Add event listeners to action buttons
+                document.querySelectorAll('.action-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const action = this.dataset.action;
+                        alert(`Action triggered: ${action}`);
+                    });
+                });
+            }
+            
+            // Get icon for notification type
+            function getIconForType(type) {
+                switch(type) {
+                    case 'system': return 'fas fa-sync-alt';
+                    case 'update': return 'fas fa-book';
+                    case 'alert': return 'fas fa-exclamation-circle';
+                    case 'success': return 'fas fa-check-circle';
+                    default: return 'fas fa-bell';
+                }
+            }
+            
+            // Update notification count
+            function updateNotificationCount() {
+                unreadCount = notifications.filter(n => n.unread).length;
+                notificationCount.textContent = unreadCount;
+                notificationCount.style.display = unreadCount > 0 ? 'flex' : 'none';
+            }
+            
+            // Mark notification as read
+            function markAsRead(id) {
+                const notification = notifications.find(n => n.id === id);
+                if (notification && notification.unread) {
+                    notification.unread = false;
+                    renderNotifications();
+                    updateNotificationCount();
+                }
+            }
+            
+            // Mark all as read
+            function markAllAsRead() {
+                notifications.forEach(n => n.unread = false);
+                renderNotifications();
+                updateNotificationCount();
+            }
+            
+            // Clear all notifications
+            function clearAllNotifications() {
+                if (confirm("Are you sure you want to clear all notifications?")) {
+                    notifications.length = 0;
+                    renderNotifications();
+                    updateNotificationCount();
+                }
+            }
+            
+            // Archive all notifications
+            function archiveAllNotifications() {
+                if (confirm("Are you sure you want to archive all notifications?")) {
+                    // In a real app, this would move notifications to archive
+                    markAllAsRead();
+                    alert("All notifications have been archived!");
+                }
+            }
+            
+            // Show toast notification
+            function showToast(title, message, type) {
+                if (dndEnabled) return;
+                
+                document.getElementById('toastTitle').textContent = title;
+                document.getElementById('toastMessage').textContent = message;
+                document.getElementById('toastIcon').className = `notification-icon ${type} pulse`;
+                
+                notificationToast.classList.add('show');
+                
+                // Auto hide after 5 seconds
+                setTimeout(() => {
+                    notificationToast.classList.remove('show');
+                }, 5000);
+            }
+            
+            // Generate a new notification
+            function generateNotification() {
+                if (dndEnabled) return;
+                
+                const types = ['system', 'update', 'alert', 'success'];
+                const titles = [
+                    "New Course Available", 
+                    "Weekly Progress Report", 
+                    "Event Reminder", 
+                    "New Message Received",
+                    "System Maintenance Notice"
+                ];
+                
+                const messages = [
+                    "Check out our new course on Quantum Physics. Enroll now!",
+                    "You've completed 80% of your weekly learning goal. Keep it up!",
+                    "Don't forget about the live Q&A session tomorrow at 3 PM.",
+                    "You have a new message from your instructor.",
+                    "Scheduled maintenance this Sunday from 2 AM to 4 AM."
+                ];
+                
+                const type = types[Math.floor(Math.random() * types.length)];
+                const title = titles[Math.floor(Math.random() * titles.length)];
+                const message = messages[Math.floor(Math.random() * messages.length)];
+                
+                const newNotification = {
+                    id: nextId++,
+                    title,
+                    message,
+                    type,
+                    time: "Just now",
+                    unread: true,
+                    important: Math.random() > 0.5,
+                    actions: Math.random() > 0.3 ? [
+                        { text: "View", icon: "fas fa-eye", action: "view" }
+                    ] : []
+                };
+                
+                notifications.unshift(newNotification);
+                renderNotifications();
+                updateNotificationCount();
+                showToast(title, message, type);
+            }
+            
+            // Event listeners
+            markAllReadBtn.addEventListener('click', markAllAsRead);
+            clearAllBtn.addEventListener('click', clearAllNotifications);
+            archiveAllBtn.addEventListener('click', archiveAllNotifications);
+            toastCloseBtn.addEventListener('click', () => {
+                notificationToast.classList.remove('show');
+            });
+            
+            notificationBell.addEventListener('click', () => {
+                // Show the notification list
+                notificationList.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            dndToggle.addEventListener('click', function() {
+                dndEnabled = !dndEnabled;
+                this.classList.toggle('active', dndEnabled);
+                this.querySelector('i').className = dndEnabled ? 
+                    "fas fa-bell" : "fas fa-bell-slash";
+                
+                alert(`Do Not Disturb ${dndEnabled ? 'enabled' : 'disabled'}`);
+            });
+            
+            filterItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const filter = this.dataset.filter;
+                    if (!filter) return;
+                    
+                    currentFilter = filter;
+                    filterItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    renderNotifications();
+                });
+            });
+            
+            // Add floating animation to logo
+            document.querySelector('.logo').classList.add('floating');
+            
+            // Simulate background notifications
+            setInterval(generateNotification, 15000);
+            
+            // Show initial toast after 3s
+            setTimeout(() => {
+                showToast("Welcome to FireLEARN", "Your notification system is ready. You'll receive updates here.", "system");
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

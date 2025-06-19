@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Partners | FireLEARN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ff004f;
+            --primary-light: #ff4d8a;
+            --secondary: #2C3E50;
+            --accent: #3498DB;
+            --light: #F8F9FA;
+            --dark: #212529;
+            --success: #28A745;
+            --card-gradient: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            --body-gradient: linear-gradient(135deg, #1a0633 0%, #000000 100%);
+            --header-gradient: linear-gradient(90deg, #ff004f, #ff8a00);
+            --announcement-bg: linear-gradient(135deg, #ff004f 0%, #ff8a00 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: var(--body-gradient);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 0, 79, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(52, 152, 219, 0.15) 0%, transparent 20%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        /* Announcement Banner */
+        .announcement-banner {
+            background: var(--announcement-bg);
+            color: white;
+            padding: 0.8rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 1000;
+        }
+        
+        .announcement-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .announcement-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .announcement-icon {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .announcement-text {
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        
+        .close-announcement {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            right: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .close-announcement:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(90deg);
+        }
+        
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            position: relative;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: var(--header-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding-bottom: 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: white;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .nav-social {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            color: #b0b0b0;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+        
+        .social-link:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-5px);
+        }
+        
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 50px;
+            height: 26px;
+            border-radius: 50px;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 0 3px;
+            transition: all 0.3s;
+        }
+        
+        .toggle-circle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            left: 3px;
+        }
+        
+        .dark .toggle-circle {
+            transform: translateX(24px);
+            background: var(--primary);
+        }
+        
+        /* Header */
+        header {
+            text-align: center;
+            margin: 3rem 0 5rem;
+            position: relative;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            background: var(--header-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: #d4d4d4;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-weight: 400;
+            line-height: 1.7;
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-box {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            min-width: 180px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 0, 79, 0.15);
+            border-color: rgba(255, 0, 79, 0.3);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #b0b0b0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Announcements Section */
+        .announcements-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 0 auto 4rem;
+            max-width: 1200px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .announcements-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--announcement-bg);
+        }
+        
+        .announcements-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .announcements-title {
+            font-size: 1.8rem;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .announcements-title i {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+        
+        .announcement-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .announcement-item {
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+        
+        .announcement-item:hover {
+            background: rgba(255, 0, 79, 0.1);
+            transform: translateX(5px);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .announcement-badge {
+            background: var(--announcement-bg);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .announcement-content-main {
+            flex: 1;
+        }
+        
+        .announcement-date {
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .announcement-text-main {
+            color: #e0e0e0;
+            line-height: 1.7;
+        }
+        
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .view-all:hover {
+            gap: 0.8rem;
+        }
+        
+        /* Main Content */
+        .main-content {
+            position: relative;
+            padding-bottom: 5rem;
+        }
+        
+        .gradient-card {
+            background: var(--card-gradient);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gradient-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,95,31,0.08) 0%, rgba(255,95,31,0) 70%);
+            z-index: 0;
+        }
+        
+        .partners-section {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 3rem;
+            color: var(--secondary);
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            width: 70px;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            border-radius: 3px;
+        }
+        
+        .section-intro {
+            color: #555;
+            max-width: 800px;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .partner-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+        }
+        
+        .partner-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .partner-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .partner-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(218, 46, 100, 0.25);
+        }
+        
+        .partner-card:hover::before {
+            opacity: 1;
+        }
+        
+        .partner-logo {
+            width: 200px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 1.5rem;
+            filter: grayscale(100%);
+            opacity: 0.8;
+            transition: all 0.4s;
+        }
+        
+        .partner-card:hover .partner-logo {
+            filter: grayscale(0%);
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        
+        .partner-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--secondary);
+        }
+        
+        .partner-desc {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .partner-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+        
+        .tag {
+            background: rgba(255, 0, 79, 0.1);
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .owners-section {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(0,0,0,0.08);
+        }
+        
+        .owners-title {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .owner-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+        
+        .owner-badge {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 1rem 1.8rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .owner-badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(221, 46, 88, 0.3);
+        }
+        
+        .owner-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.2rem;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .owner-name {
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+        
+        .cta-section {
+            text-align: center;
+            margin: 5rem 0;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            box-shadow: 0 5px 20px rgba(255, 31, 100, 0.4);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(to right, var(--accent), var(--primary));
+            transition: width 0.5s;
+            z-index: -1;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 31, 89, 0.6);
+        }
+        
+        .btn:hover::before {
+            width: 100%;
+        }
+        
+        .btn i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            box-shadow: none;
+            margin-left: 1.5rem;
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Testimonials */
+        .testimonials-section {
+            margin: 6rem 0;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+        
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 0, 79, 0.08);
+            border-color: rgba(255, 0, 79, 0.3);
+        }
+        
+        .testimonial-content {
+            font-style: italic;
+            color: #e0e0e0;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            position: relative;
+        }
+        
+        .testimonial-content::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: -15px;
+            font-size: 5rem;
+            color: rgba(255, 0, 79, 0.2);
+            font-family: serif;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 15px;
+        }
+        
+        .author-info h4 {
+            color: white;
+            margin-bottom: 5px;
+        }
+        
+        .author-info p {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+        
+        /* Modal */
+        .telegram-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.4s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .telegram-box {
+            background: linear-gradient(135deg, #1a0633 0%, #2c003e 100%);
+            padding: 3.5rem;
+            border-radius: 20px;
+            max-width: 550px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 0, 79, 0.3);
+            animation: scaleUp 0.5s;
+        }
+        
+        @keyframes scaleUp {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #b0b0b0;
+            transition: all 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .close-btn:hover {
+            color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .telegram-icon {
+            font-size: 4.5rem;
+            color: #0088CC;
+            margin-bottom: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+        
+        .telegram-box h3 {
+            margin-bottom: 1.5rem;
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .telegram-box p {
+            margin-bottom: 2.5rem;
+            color: #d0d0d0;
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(10, 5, 24, 0.8);
+            padding: 4rem 0 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 5rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-column h4 {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-column h4::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #b0b0b0;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-links a i {
+            margin-right: 10px;
+            width: 20px;
+            color: var(--primary);
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 0, 79, 0.4);
+            z-index: 100;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 0, 79, 0.6);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            .partner-grid, .testimonials-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+            
+            .nav-social {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            h1 {
+                font-size: 2.3rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .gradient-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .btn {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+            
+            .btn-outline {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+            
+            .telegram-box {
+                padding: 2.5rem 1.5rem;
+            }
+            
+            .announcement-item {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .announcement-badge {
+                align-self: flex-start;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero-stats {
+                gap: 1.5rem;
+            }
+            
+            .stat-box {
+                min-width: 140px;
+                padding: 1rem 1.5rem;
+            }
+            
+            .stat-value {
+                font-size: 2rem;
+            }
+            
+            .partner-grid, .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Announcement Banner -->
+    <div class="announcement-banner">
+        <div class="announcement-content">
+            <div class="announcement-icon">
+                <i class="fas fa-bullhorn"></i>
+            </div>
+            <div class="announcement-text">
+                🚀 New Partnership Announcement: FireLEARN collaborates with Google for advanced AI courses!
+            </div>
+        </div>
+        <button class="close-announcement">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-fire"></i>FireLEARN
+        </div>
+        <ul class="nav-links">
+            <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="books.html"><i class="fas fa-book"></i> FireBooks</a></li>
+            <li><a href="team.html"><i class="fas fa-users"></i> Team</a></li>
+<li><a href="notification.html"><i class="fas fa-bell"></i> Notification</a></li>            <li><a href="coming-soon.html"><i class="fas fa-book"></i> Courses</a></li>
+        </ul>
+        <div class="nav-social">
+            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            <button class="theme-toggle" id="themeToggle">
+                <span class="toggle-circle"></span>
+            </button>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <!-- Header/Hero Section -->
+        <header>
+            <div class="hero-content">
+                <h1>Strategic Educational Partnerships</h1>
+                <p class="subtitle">Collaborating with industry leaders and innovators to deliver exceptional learning experiences that transform education and empower learners worldwide.</p>
+                
+                <div class="hero-stats">
+                    <div class="stat-box">
+                        <div class="stat-value">25+</div>
+                        <div class="stat-label">Global Partners</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">120K+</div>
+                        <div class="stat-label">Active Learners</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">98%</div>
+                        <div class="stat-label">Satisfaction Rate</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">15</div>
+                        <div class="stat-label">Countries</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Announcements Section -->
+        <section class="announcements-section">
+            <div class="announcements-header">
+                <h2 class="announcements-title">
+                    <i class="fas fa-bullhorn"></i> Latest Announcements
+                </h2>
+                <a href="#" class="view-all">
+                    View All <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="announcement-list">
+                <div class="announcement-item">
+                    <div class="announcement-badge">Partnership</div>
+                    <div class="announcement-content-main">
+                        <div class="announcement-date">October 15, 2023</div>
+                        <p class="announcement-text-main">FireLEARN partners with Google to launch new AI certification program. This collaboration will bring cutting-edge AI education to our platform.</p>
+                    </div>
+                </div>
+                
+                <div class="announcement-item">
+                    <div class="announcement-badge">Event</div>
+                    <div class="announcement-content-main">
+                        <div class="announcement-date">October 10, 2023</div>
+                        <p class="announcement-text-main">Join our Global Learning Summit on November 5th. Free for all premium members. Featuring industry experts and networking opportunities.</p>
+                    </div>
+                </div>
+                
+                <div class="announcement-item">
+                    <div class="announcement-badge">Platform Update</div>
+                    <div class="announcement-content-main">
+                        <div class="announcement-date">October 5, 2023</div>
+                        <p class="announcement-text-main">New mobile app released with offline learning capabilities. Download now for iOS and Android to learn anywhere, anytime.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="gradient-card">
+                <div class="partners-section">
+                    <h2 class="section-title">Our Alliance Network</h2>
+                    <p class="section-intro">We've carefully selected partners who share our vision for innovative education. Together, we're creating learning experiences that push boundaries and inspire the next generation of thinkers and creators.</p>
+                    
+                    <div class="partner-grid">
+                        <div class="partner-card">
+                            <img src="https://i.imgur.com/9l2WGgw.jpeg" alt="EduVerse" class="partner-logo">
+                            <h3 class="partner-name">EduVerse</h3>
+                            <p class="partner-desc">Transforming education through immersive VR technology and interactive learning environments.</p>
+                            <div class="partner-tags">
+                                <span class="tag">VR Learning</span>
+                                <span class="tag">EdTech</span>
+                            </div>
+                        </div>
+                        
+                        <div class="partner-card">
+                            <img src="https://i.imgur.com/duNpBZD.jpeg" alt="StudyX" class="partner-logo">
+                            <h3 class="partner-name">StudyX</h3>
+                            <p class="partner-desc">AI-powered learning platform that adapts to each student's unique learning style and pace.</p>
+                            <div class="partner-tags">
+                                <span class="tag">AI Education</span>
+                                <span class="tag">Adaptive</span>
+                            </div>
+                        </div>
+                        
+                        <div class="partner-card">
+                            <img src="https://i.imgur.com/WEUx41k.jpeg" alt="Course Walla" class="partner-logo">
+                            <h3 class="partner-name">Course Walla</h3>
+                            <p class="partner-desc">Premium educational content provider with industry-leading resources for all learning levels.</p>
+                            <div class="partner-tags">
+                                <span class="tag">Content</span>
+                                <span class="tag">Resources</span>
+                            </div>
+                        </div>
+                        
+                        <div class="partner-card">
+                            <img src="https://i.imgur.com/7vQ0yXt.png" alt="CodePath" class="partner-logo">
+                            <h3 class="partner-name">CodePath</h3>
+                            <p class="partner-desc">Leading provider of coding bootcamps and developer training for the modern workforce.</p>
+                            <div class="partner-tags">
+                                <span class="tag">Coding</span>
+                                <span class="tag">Developer</span>
+                            </div>
+                        </div>
+                        
+                        <div class="partner-card">
+                            <img src="https://i.imgur.com/4R7y5Wf.png" alt="SkillBridge" class="partner-logo">
+                            <h3 class="partner-name">SkillBridge</h3>
+                            <p class="partner-desc">Connecting learners with industry experts for mentorship and career development.</p>
+                            <div class="partner-tags">
+                                <span class="tag">Mentorship</span>
+                                <span class="tag">Career</span>
+                            </div>
+                        </div>
+                        
+                        <div class="partner-card">
+                            <img src="https://i.imgur.com/9mXZJ3r.png" alt="FutureLearn" class="partner-logo">
+                            <h3 class="partner-name">FutureLearn</h3>
+                            <p class="partner-desc">Global platform offering diverse courses from world-class universities and institutions.</p>
+                            <div class="partner-tags">
+                                <span class="tag">University</span>
+                                <span class="tag">Global</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="owners-section">
+                        <h3 class="owners-title">Leadership & Vision</h3>
+                        <div class="owner-list">
+                            <div class="owner-badge">
+                                <div class="owner-icon">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <span class="owner-name">Divya Bansal</span>
+                            </div>
+                            
+                            <div class="owner-badge">
+                                <div class="owner-icon">
+                                    <i class="fas fa-gamepad"></i>
+                                </div>
+                                <span class="owner-name">Fire Gaming</span>
+                            </div>
+                            
+                            <div class="owner-badge">
+                                <div class="owner-icon">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <span class="owner-name">Innovation Team</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Testimonials Section -->
+            <div class="testimonials-section">
+                <h2 class="section-title" style="color: white;">What Partners Say</h2>
+                <p class="section-intro" style="color: #b0b0b0; max-width: 800px;">Our collaborations have created meaningful impact across the education landscape. Here's what our partners have to say about working with us.</p>
+                
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <p class="testimonial-content">Working with FireLEARN has transformed how we deliver content to students. Their innovative approach to learning technology has helped us reach 40% more learners.</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">SJ</div>
+                            <div class="author-info">
+                                <h4>Sarah Johnson</h4>
+                                <p>CEO, EduVerse</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <p class="testimonial-content">The partnership with FireLEARN allowed us to integrate our AI technology into a robust learning ecosystem. The results have exceeded our expectations.</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">MR</div>
+                            <div class="author-info">
+                                <h4>Michael Roberts</h4>
+                                <p>CTO, StudyX</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <p class="testimonial-content">FireLEARN's commitment to educational excellence aligns perfectly with our mission. Together we're creating pathways for learners in underserved communities.</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">AK</div>
+                            <div class="author-info">
+                                <h4>Aisha Khan</h4>
+                                <p>Director, FutureLearn</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <a href="books.html" class="btn">
+                    <i class="fas fa-book-open"></i> Explore FireBooks
+                </a>
+                <button id="telegramBtn" class="btn btn-outline">
+                    <i class="fab fa-telegram"></i> Join Our Community
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>FireLEARN</h4>
+                    <p style="color: #b0b0b0; line-height: 1.7; margin-bottom: 1.5rem;">Transforming education through innovative technology and strategic partnerships to create accessible, engaging learning experiences for everyone.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="coming-soon.html"><i class="fas fa-chevron-right"></i> Courses</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Learning Paths</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Instructors</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Success Stories</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Help Center</a></li>
+                        <li><a href="https://t.me/firelearnavailable"><i class="fas fa-chevron-right"></i> Telegram</a></li>
+                        <li><a href="privacy-policy.html"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Tutorials</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Our App</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Contact Us</h4>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-map-marker-alt"></i> 123 Education St, Learnville</a></li>
+                        <li><a href="tel:+11234567890"><i class="fas fa-phone"></i> +1 (123) 456-7890</a></li>
+                        <li><a href="mailto:info@firelearn.com"><i class="fas fa-envelope"></i> info@firelearn.com</a></li>
+                        <li><a href="#"><i class="fas fa-comments"></i> Live Chat Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 FireLEARN. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--primary);"></i> for the future of education</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Telegram Popup -->
+    <div class="telegram-popup" id="telegramPopup">
+        <div class="telegram-box">
+            <span class="close-btn" id="closePopup">&times;</span>
+            <div class="telegram-icon">
+                <i class="fab fa-telegram"></i>
+            </div>
+            <h3>Join Our Global Learning Community</h3>
+            <p>Connect with 25,000+ educators, learners, and industry partners in our thriving Telegram community. Get exclusive updates, early access to courses, and collaboration opportunities.</p>
+            <a href="https://t.me/firelearnavailable" class="btn" target="_blank">
+                <i class="fab fa-telegram"></i> Join Channel Now
+            </a>
+        </div>
+    </div>
+    
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+        });
+        
+        // Telegram Popup
+        document.getElementById('telegramBtn').addEventListener('click', function() {
+            document.getElementById('telegramPopup').style.display = 'flex';
+        });
+        
+        document.getElementById('closePopup').addEventListener('click', function() {
+            document.getElementById('telegramPopup').style.display = 'none';
+        });
+        
+        document.getElementById('telegramPopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+        
+        // Back to Top Button
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+        
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Partner card animation on scroll
+        const partnerCards = document.querySelectorAll('.partner-card');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.6s forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+        
+        partnerCards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            observer.observe(card);
+        });
+        
+        // Add CSS for fadeInUp animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Show popup after 8 seconds
+        setTimeout(function() {
+            document.getElementById('telegramPopup').style.display = 'flex';
+        }, 8000);
+        
+        // Close announcement banner
+        document.querySelector('.close-announcement').addEventListener('click', function() {
+            document.querySelector('.announcement-banner').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

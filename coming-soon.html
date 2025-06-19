@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launching Soon | FireLEARN-X</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0c0e1d, #1d2039, #2d325a);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            padding: 50px;
+            text-align: center;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 10;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc, #2ce3a0);
+            border-radius: 24px 24px 0 0;
+        }
+        
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        
+        .logo-inner {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(45deg);
+            box-shadow: 0 10px 30px rgba(106, 17, 203, 0.4);
+        }
+        
+        .logo-inner i {
+            transform: rotate(-45deg);
+            font-size: 36px;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 52px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #fff, #b0e0ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        
+        .tagline {
+            font-size: 22px;
+            color: #a0b0ff;
+            margin-bottom: 40px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+        
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 45px 0;
+        }
+        
+        .countdown-item {
+            background: rgba(37, 117, 252, 0.15);
+            border-radius: 16px;
+            padding: 20px 15px;
+            min-width: 120px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(37, 117, 252, 0.25);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .countdown-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #2575fc, #2ce3a0);
+        }
+        
+        .countdown-item:hover {
+            transform: translateY(-8px);
+            background: rgba(37, 117, 252, 0.2);
+        }
+        
+        .countdown-number {
+            font-size: 42px;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(37, 117, 252, 0.5);
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .countdown-label {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #b0c8ff;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+        
+        p {
+            font-size: 18px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            color: #d0d8ff;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .highlight {
+            background: linear-gradient(90deg, #2575fc, #2ce3a0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 600;
+        }
+        
+        .team-section {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 35px 0;
+            border-left: 4px solid #6a11cb;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .team-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+        }
+        
+        .team-section h2 {
+            margin-bottom: 20px;
+            color: #fff;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        .team-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+        
+        .team-member {
+            background: rgba(37, 117, 252, 0.1);
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #6a9dff;
+            border: 2px solid rgba(37, 117, 252, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-5px);
+            background: rgba(37, 117, 252, 0.2);
+            box-shadow: 0 5px 15px rgba(37, 117, 252, 0.2);
+        }
+        
+        .voting-section {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 35px;
+            margin: 40px 0 30px;
+            border-left: 4px solid #2ce3a0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .voting-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #2ce3a0, #2575fc);
+        }
+        
+        .voting-section h2 {
+            margin-bottom: 25px;
+            color: #fff;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        .vote-options {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .vote-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50px;
+            padding: 18px 40px;
+            font-size: 18px;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            min-width: 220px;
+        }
+        
+        .vote-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .vote-btn.yes:hover {
+            background: linear-gradient(135deg, #2ce3a0, #2575fc);
+        }
+        
+        .vote-btn.no:hover {
+            background: linear-gradient(135deg, #ff6b6b, #ffa502);
+        }
+        
+        .vote-btn.yes {
+            background: linear-gradient(135deg, rgba(44, 227, 160, 0.3), rgba(37, 117, 252, 0.3));
+        }
+        
+        .vote-btn.no {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.3), rgba(255, 165, 2, 0.3));
+        }
+        
+        .vote-results {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .result-bar {
+            height: 36px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .result-fill {
+            height: 100%;
+            border-radius: 18px;
+            transition: width 1s cubic-bezier(0.19, 1, 0.22, 1);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 20px;
+            font-weight: 600;
+            color: white;
+            min-width: 60px;
+        }
+        
+        .yes-fill {
+            background: linear-gradient(90deg, #2ce3a0, #2575fc);
+            box-shadow: 0 0 20px rgba(44, 227, 160, 0.3);
+        }
+        
+        .no-fill {
+            background: linear-gradient(90deg, #ff6b6b, #ffa502);
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 16px;
+            color: #a0b0ff;
+        }
+        
+        .stats i {
+            margin-right: 8px;
+            color: #6a9dff;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .social-link {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.07);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .social-link:hover {
+            transform: translateY(-8px) scale(1.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .social-link:nth-child(1):hover { background: linear-gradient(135deg, #1da1f2, #1a91da); }
+        .social-link:nth-child(2):hover { background: linear-gradient(135deg, #4267B2, #3b5998); }
+        .social-link:nth-child(3):hover { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); }
+        .social-link:nth-child(4):hover { background: linear-gradient(135deg, #0077b5, #00a0dc); }
+        
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .floating {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(106, 17, 203, 0.15);
+            filter: blur(60px);
+        }
+        
+        .floating:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            left: -100px;
+            animation: float 25s infinite linear;
+        }
+        
+        .floating:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            bottom: -50px;
+            right: -50px;
+            background: rgba(37, 117, 252, 0.15);
+            animation: float 20s infinite linear reverse;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, 50px) rotate(90deg); }
+            50% { transform: translate(100px, 0) rotate(180deg); }
+            75% { transform: translate(50px, -50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+        
+        .progress-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            height: 12px;
+            border-radius: 10px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #2575fc, #2ce3a0);
+            border-radius: 10px;
+            width: 78%;
+            position: relative;
+            animation: progress-animation 3s infinite alternate;
+        }
+        
+        @keyframes progress-animation {
+            0% { width: 78%; }
+            100% { width: 80%; }
+        }
+        
+        .progress-text {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #b0c8ff;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 35px 25px;
+            }
+            
+            h1 {
+                font-size: 40px;
+            }
+            
+            .tagline {
+                font-size: 18px;
+            }
+            
+            .countdown {
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+            
+            .countdown-item {
+                min-width: 100px;
+                padding: 15px 10px;
+            }
+            
+            .countdown-number {
+                font-size: 32px;
+            }
+            
+            .vote-options {
+                gap: 15px;
+            }
+            
+            .vote-btn {
+                padding: 15px 25px;
+                min-width: 200px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 32px;
+            }
+            
+            .countdown-item {
+                min-width: 80px;
+                padding: 12px 8px;
+            }
+            
+            .countdown-number {
+                font-size: 28px;
+            }
+            
+            .vote-btn {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating"></div>
+        <div class="floating"></div>
+    </div>
+    
+    <div class="container">
+        <div class="logo">
+            <div class="logo-inner">
+                <i class="fas fa-rocket"></i>
+            </div>
+        </div>
+        <h1>Launching Soon</h1>
+       <div class="tagline">Revolutionizing the future of education for every learner</div>
+        
+        <p>We're creating a revolutionary learning platform that will transform how students <span class="highlight">study, grow, and succeed</span>. Our mission is to make quality education accessible to all — that's why we're providing <strong>all paid batches completely free</strong> across every platform.</p>
+        
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+        <div class="progress-text">Development Progress: 78% Complete</div>
+        
+        <div class="countdown">
+            <div class="countdown-item">
+                <div class="countdown-number" id="days">00</div>
+                <div class="countdown-label">Days</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="hours">00</div>
+                <div class="countdown-label">Hours</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="minutes">00</div>
+                <div class="countdown-label">Minutes</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="seconds">00</div>
+                <div class="countdown-label">Seconds</div>
+            </div>
+        </div>
+        
+        <div class="team-section">
+            <h2>Our Dedicated Team</h2>
+            <p>Our experts are working diligently around the clock to perfect every detail. We're committed to delivering excellence and innovation at every step.</p>
+            
+            <div class="team-grid">
+                <div class="team-member"><i class="fas fa-code"></i></div>
+                <div class="team-member"><i class="fas fa-paint-brush"></i></div>
+                <div class="team-member"><i class="fas fa-cogs"></i></div>
+                <div class="team-member"><i class="fas fa-lightbulb"></i></div>
+                <div class="team-member"><i class="fas fa-server"></i></div>
+                <div class="team-member"><i class="fas fa-chart-line"></i></div>
+            </div>
+        </div>
+        
+        <div class="voting-section">
+            <h2>Are You Excited For Our Launch?</h2>
+            <p>Let us know your anticipation level. Your feedback helps us prioritize features and improve our launch strategy.</p>
+            
+            <div class="vote-options">
+                <button class="vote-btn yes" id="vote-yes">
+                    <i class="fas fa-check-circle"></i> Yes, I can't wait!
+                </button>
+                <button class="vote-btn no" id="vote-no">
+                    <i class="fas fa-times-circle"></i> Not really
+                </button>
+            </div>
+            
+            <div class="vote-results">
+                <div class="result-title">Community Anticipation:</div>
+                <div class="result-bar">
+                    <div class="result-fill yes-fill" id="yes-bar" style="width: 86%;">86%</div>
+                </div>
+                <div class="result-bar">
+                    <div class="result-fill no-fill" id="no-bar" style="width: 14%;">14%</div>
+                </div>
+                
+                <div class="stats">
+                    <div><i class="fas fa-user-check"></i> Total Votes: <span id="total-votes">1,842</span></div>
+                    <div><i class="fas fa-clock"></i> Last vote: 3 minutes ago</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </div>
+
+    <script>
+        // Countdown timer with fixed launch date
+        function updateCountdown() {
+            // Set launch date to October 31, 2024 at 12:00 PM
+            const launchDate = new Date("October 31, 2024 12:00:00").getTime();
+            const now = new Date().getTime();
+            const diff = launchDate - now;
+            
+            // Time calculations
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            // Update display
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            
+            // Add animation when numbers change
+            const numbers = document.querySelectorAll('.countdown-number');
+            numbers.forEach(num => {
+                num.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    num.style.transform = 'scale(1)';
+                }, 300);
+            });
+        }
+        
+        // Initialize and update every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+        
+        // Voting system
+        const voteButtons = document.querySelectorAll('.vote-btn');
+        const yesBar = document.getElementById('yes-bar');
+        const noBar = document.getElementById('no-bar');
+        const totalVotesElement = document.getElementById('total-votes');
+        
+        let totalVotes = 1842;
+        let yesVotes = 1584;
+        let noVotes = 258;
+        
+        function updateVoteDisplay() {
+            const yesPercentage = Math.round((yesVotes / totalVotes) * 100);
+            const noPercentage = 100 - yesPercentage;
+            
+            yesBar.style.width = `${yesPercentage}%`;
+            yesBar.textContent = `${yesPercentage}%`;
+            
+            noBar.style.width = `${noPercentage}%`;
+            noBar.textContent = `${noPercentage}%`;
+            
+            totalVotesElement.textContent = totalVotes.toLocaleString();
+        }
+        
+        voteButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (button.classList.contains('yes')) {
+                    yesVotes++;
+                    button.style.background = 'linear-gradient(135deg, #2ce3a0, #2575fc)';
+                } else {
+                    noVotes++;
+                    button.style.background = 'linear-gradient(135deg, #ff6b6b, #ffa502)';
+                }
+                totalVotes++;
+                
+                // Add animation effect
+                button.style.transform = 'translateY(0) scale(0.95)';
+                setTimeout(() => {
+                    button.style.transform = 'translateY(-5px)';
+                }, 200);
+                
+                // Update display
+                updateVoteDisplay();
+                
+                // Show thank you message
+                const message = document.createElement('div');
+                message.textContent = 'Thank you for your feedback!';
+                message.style.position = 'fixed';
+                message.style.bottom = '30px';
+                message.style.left = '50%';
+                message.style.transform = 'translateX(-50%)';
+                message.style.background = 'linear-gradient(90deg, #2575fc, #2ce3a0)';
+                message.style.color = 'white';
+                message.style.padding = '15px 35px';
+                message.style.borderRadius = '50px';
+                message.style.zIndex = '1000';
+                message.style.fontWeight = '500';
+                message.style.boxShadow = '0 8px 25px rgba(37, 117, 252, 0.3)';
+                message.style.opacity = '0';
+                message.style.transition = 'opacity 0.3s ease';
+                document.body.appendChild(message);
+                
+                setTimeout(() => {
+                    message.style.opacity = '1';
+                }, 10);
+                
+                setTimeout(() => {
+                    message.style.opacity = '0';
+                    setTimeout(() => {
+                        document.body.removeChild(message);
+                    }, 500);
+                }, 3000);
+            });
+        });
+        
+        // Initialize vote display
+        updateVoteDisplay();
+        
+        // Add floating elements animation
+        const floatingElements = document.querySelectorAll('.floating');
+        floatingElements.forEach(el => {
+            const animationDuration = parseInt(getComputedStyle(el).animationDuration);
+            setInterval(() => {
+                el.style.animation = 'none';
+                setTimeout(() => {
+                    el.style.animation = `float ${animationDuration}s infinite linear`;
+                }, 10);
+            }, animationDuration * 1000);
+        });
+    </script>
+</body>
+</html>
