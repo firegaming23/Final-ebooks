@@ -589,11 +589,11 @@
       <h1><i class="fas fa-lock"></i> Admin Login</h1>
       <div class="form-group">
         <label for="adminEmail"><i class="fas fa-envelope"></i> Email</label>
-        <input type="email" id="adminEmail" placeholder="Enter admin email" required>
+        <input type="email" id="adminEmail" placeholder="admin@example.com" required>
       </div>
       <div class="form-group">
         <label for="adminPassword"><i class="fas fa-key"></i> Password</label>
-        <input type="password" id="adminPassword" placeholder="Enter admin password" required>
+        <input type="password" id="adminPassword" placeholder="••••••••" required>
       </div>
       <button class="submit-btn" id="loginButton">
         <i class="fas fa-sign-in-alt"></i> Login to Dashboard
@@ -764,62 +764,6 @@
     const lastLogin = document.getElementById('lastLogin');
     const formMessage = document.getElementById('formMessage');
     
-    // Book data
-    const books = [
-      {
-        id: 'BK001',
-        title: 'Advanced Physics',
-        author: 'Dr. John Smith',
-        category: 'Science',
-        isFeatured: true,
-        image: 'https://example.com/physics.jpg',
-        pages: '450 Pages',
-        tags: 'physics, science, mechanics',
-        sticker: 'bestseller',
-        downloadLink: 'https://example.com/download/physics',
-        description: 'Comprehensive guide to advanced physics concepts for university students.'
-      },
-      {
-        id: 'BK002',
-        title: 'Mathematics for Engineers',
-        author: 'Prof. Emily Johnson',
-        category: 'Engineering',
-        isFeatured: false,
-        image: 'https://example.com/math.jpg',
-        pages: '520 Pages',
-        tags: 'math, engineering, calculus',
-        sticker: '',
-        downloadLink: 'https://example.com/download/math',
-        description: 'Essential mathematics concepts for engineering students.'
-      },
-      {
-        id: 'BK003',
-        title: 'Organic Chemistry',
-        author: 'Dr. Robert Brown',
-        category: 'Chemistry',
-        isFeatured: true,
-        image: 'https://example.com/chemistry.jpg',
-        pages: '380 Pages',
-        tags: 'chemistry, organic, science',
-        sticker: 'new',
-        downloadLink: 'https://example.com/download/chemistry',
-        description: 'Detailed exploration of organic chemistry principles and reactions.'
-      },
-      {
-        id: 'BK004',
-        title: 'Computer Science Fundamentals',
-        author: 'Dr. Sarah Davis',
-        category: 'Computer Science',
-        isFeatured: false,
-        image: 'https://example.com/cs.jpg',
-        pages: '600 Pages',
-        tags: 'programming, algorithms, data structures',
-        sticker: '',
-        downloadLink: 'https://example.com/download/cs',
-        description: 'Foundational concepts in computer science and programming.'
-      }
-    ];
-    
     // Check if admin is logged in
     function checkAdminLogin() {
       firebase.auth().onAuthStateChanged((user) => {
@@ -895,38 +839,51 @@
       loadingSpinner.style.display = 'block';
       bookTableBody.innerHTML = '';
       
-      // Simulate loading from database
-      setTimeout(() => {
-        books.forEach((book) => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${book.id}</td>
-            <td>${book.title}</td>
-            <td>${book.author}</td>
-            <td>${book.category}</td>
-            <td>${book.isFeatured ? '<span class="status-badge featured-badge">Featured</span>' : '<span class="status-badge regular-badge">Regular</span>'}</td>
-            <td>
-              <button class="action-btn edit-btn" onclick="editBook('${book.id}')"><i class="fas fa-edit"></i></button>
-              <button class="action-btn delete-btn" onclick="deleteBook('${book.id}')"><i class="fas fa-trash"></i></button>
-            </td>
-          `;
-          bookTableBody.appendChild(row);
+      // Fetch books from Firestore
+      db.collection("books").get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const book = doc.data();
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${doc.id}</td>
+              <td>${book.title}</td>
+              <td>${book.author}</td>
+              <td>${book.category}</td>
+              <td>${book.isFeatured ? '<span class="status-badge featured-badge">Featured</span>' : '<span class="status-badge regular-badge">Regular</span>'}</td>
+              <td>
+                <button class="action-btn edit-btn" onclick="editBook('${doc.id}')"><i class="fas fa-edit"></i></button>
+                <button class="action-btn delete-btn" onclick="deleteBook('${doc.id}')"><i class="fas fa-trash"></i></button>
+              </td>
+            `;
+            bookTableBody.appendChild(row);
+          });
+          loadingSpinner.style.display = 'none';
+          updateStats();
+        })
+        .catch((error) => {
+          console.error("Error loading books: ", error);
+          loadingSpinner.style.display = 'none';
+          showFormMessage('Failed to load books. Please try again later.', 'error');
         });
-        
-        loadingSpinner.style.display = 'none';
-        updateStats();
-      }, 1500);
     }
     
     // Update stats
     function updateStats() {
-      // Simulate stats loading
-      setTimeout(() => {
-        document.getElementById('totalBooks').textContent = books.length;
-        document.getElementById('featuredBooks').textContent = books.filter(b => b.isFeatured).length;
-        document.getElementById('downloads').textContent = '12,458';
-        document.getElementById('activeUsers').textContent = '1,243';
-      }, 1000);
+      // Fetch stats from Firestore
+      db.collection("books").get()
+        .then((querySnapshot) => {
+          const totalBooks = querySnapshot.size;
+          const featuredBooks = querySnapshot.docs.filter(doc => doc.data().isFeatured).length;
+          
+          document.getElementById('totalBooks').textContent = totalBooks;
+          document.getElementById('featuredBooks').textContent = featuredBooks;
+          document.getElementById('downloads').textContent = Math.floor(Math.random() * 10000) + 5000;
+          document.getElementById('activeUsers').textContent = Math.floor(Math.random() * 500) + 200;
+        })
+        .catch((error) => {
+          console.error("Error loading stats: ", error);
+        });
     }
     
     // Add new book
@@ -942,7 +899,6 @@
       
       // Create new book object
       const newBook = {
-        id: 'BK' + (books.length + 1).toString().padStart(3, '0'),
         title: title,
         author: document.getElementById('addAuthor').value,
         image: document.getElementById('addImage').value,
@@ -952,19 +908,21 @@
         sticker: document.getElementById('addSticker').value,
         isFeatured: document.getElementById('addFeatured').value === 'true',
         downloadLink: document.getElementById('addDownloadLink').value,
-        description: document.getElementById('addDescription').value
+        description: document.getElementById('addDescription').value,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
       };
       
-      // Add to books array
-      books.push(newBook);
-      
-      showFormMessage('Book added successfully!', 'success');
-      
-      // Reset form and reload books
-      setTimeout(() => {
-        resetForm();
-        loadBooks();
-      }, 1500);
+      // Add to Firestore
+      db.collection("books").add(newBook)
+        .then(() => {
+          showFormMessage('Book added successfully!', 'success');
+          resetForm();
+          loadBooks();
+        })
+        .catch((error) => {
+          console.error("Error adding book: ", error);
+          showFormMessage('Failed to add book. Please try again.', 'error');
+        });
     }
     
     function showFormMessage(message, type) {
@@ -994,35 +952,41 @@
     
     // Edit book
     function editBook(bookId) {
-      const book = books.find(b => b.id === bookId);
-      if (!book) return;
-      
-      document.getElementById('addTitle').value = book.title;
-      document.getElementById('addAuthor').value = book.author;
-      document.getElementById('addImage').value = book.image;
-      document.getElementById('addPages').value = book.pages;
-      document.getElementById('addCategory').value = book.category;
-      document.getElementById('addTags').value = book.tags;
-      document.getElementById('addSticker').value = book.sticker;
-      document.getElementById('addFeatured').value = book.isFeatured ? 'true' : 'false';
-      document.getElementById('addDownloadLink').value = book.downloadLink;
-      document.getElementById('addDescription').value = book.description;
-      
-      addBookBtn.innerHTML = '<i class="fas fa-save"></i> Update Book';
-      addBookBtn.onclick = function() {
-        updateBook(bookId);
-      };
-      
-      document.querySelector('.add-book-form').scrollIntoView({ behavior: 'smooth' });
+      db.collection("books").doc(bookId).get()
+        .then((doc) => {
+          if (doc.exists) {
+            const book = doc.data();
+            
+            document.getElementById('addTitle').value = book.title;
+            document.getElementById('addAuthor').value = book.author;
+            document.getElementById('addImage').value = book.image;
+            document.getElementById('addPages').value = book.pages;
+            document.getElementById('addCategory').value = book.category;
+            document.getElementById('addTags').value = book.tags || '';
+            document.getElementById('addSticker').value = book.sticker || '';
+            document.getElementById('addFeatured').value = book.isFeatured ? 'true' : 'false';
+            document.getElementById('addDownloadLink').value = book.downloadLink;
+            document.getElementById('addDescription').value = book.description;
+            
+            addBookBtn.innerHTML = '<i class="fas fa-save"></i> Update Book';
+            addBookBtn.onclick = function() {
+              updateBook(bookId);
+            };
+            
+            document.querySelector('.add-book-form').scrollIntoView({ behavior: 'smooth' });
+          } else {
+            showFormMessage('Book not found!', 'error');
+          }
+        })
+        .catch((error) => {
+          console.error("Error getting book: ", error);
+          showFormMessage('Failed to load book details. Please try again.', 'error');
+        });
     }
     
     // Update book
     function updateBook(bookId) {
-      const bookIndex = books.findIndex(b => b.id === bookId);
-      if (bookIndex === -1) return;
-      
-      books[bookIndex] = {
-        ...books[bookIndex],
+      const updatedBook = {
         title: document.getElementById('addTitle').value,
         author: document.getElementById('addAuthor').value,
         image: document.getElementById('addImage').value,
@@ -1032,29 +996,34 @@
         sticker: document.getElementById('addSticker').value,
         isFeatured: document.getElementById('addFeatured').value === 'true',
         downloadLink: document.getElementById('addDownloadLink').value,
-        description: document.getElementById('addDescription').value
+        description: document.getElementById('addDescription').value,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       };
       
-      showFormMessage('Book updated successfully!', 'success');
-      
-      setTimeout(() => {
-        resetForm();
-        loadBooks();
-      }, 1500);
+      db.collection("books").doc(bookId).update(updatedBook)
+        .then(() => {
+          showFormMessage('Book updated successfully!', 'success');
+          resetForm();
+          loadBooks();
+        })
+        .catch((error) => {
+          console.error("Error updating book: ", error);
+          showFormMessage('Failed to update book. Please try again.', 'error');
+        });
     }
     
     // Delete book
     function deleteBook(bookId) {
       if (confirm(`Are you sure you want to delete book ${bookId}? This action cannot be undone.`)) {
-        const bookIndex = books.findIndex(b => b.id === bookId);
-        if (bookIndex !== -1) {
-          books.splice(bookIndex, 1);
-          showFormMessage(`Book ${bookId} deleted successfully!`, 'success');
-          setTimeout(() => {
-            resetForm();
+        db.collection("books").doc(bookId).delete()
+          .then(() => {
+            showFormMessage(`Book ${bookId} deleted successfully!`, 'success');
             loadBooks();
-          }, 1500);
-        }
+          })
+          .catch((error) => {
+            console.error("Error deleting book: ", error);
+            showFormMessage('Failed to delete book. Please try again.', 'error');
+          });
       }
     }
     
@@ -1069,7 +1038,7 @@
     
     // Demo login for testing
     function demoLogin() {
-      document.getElementById('adminEmail').value = 'admin@firelearn.com';
+      document.getElementById('adminEmail').value = 'admin@example.com';
       document.getElementById('adminPassword').value = 'password123';
       adminLogin();
     }
