@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🔥FireLEARN Books🔥</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <style>
+    :root {
+      --primary: #ff7700;
+      --secondary: #00c8aa;
+      --tertiary: #7c4dff;
+      --dark: #121212;
+      --light: #f8f9fa;
+      --gray: #495057;
+      --card-bg: #1a1a1a;
+      --card-hover: #252525;
+      --accent: #ff004f;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #2c003e, #000000);
+      color: white;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .title {
+      margin-bottom: 15px;
+      font-weight: 900;
+      font-size: 2.5rem;
+      background: linear-gradient(120deg,
+          var(--primary),
+          var(--secondary),
+          var(--tertiary),
+          var(--primary));
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: moveGradient 4s linear infinite;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes moveGradient {
+      0% {
+        background-position: 25% 0;
+      }
+
+      25% {
+        background-position: 50% 0;
+      }
+
+      50% {
+        background-position: 75% 0;
+      }
+
+      75% {
+        background-position: 100% 0;
+      }
+
+      100% {
+        background-position: 0 0;
+      }
+    }
+
+    /* Navigation Bar */
+    nav {
+      background: rgba(0, 0, 0, 0.85);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      border-bottom: 1px solid var(--accent);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo i {
+      color: var(--accent);
+      font-size: 1.8rem;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 1.5rem;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 15px;
+      border-radius: 20px;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    nav a:hover {
+      background: var(--accent);
+      box-shadow: 0 0 15px rgba(255, 0, 79, 0.6);
+    }
+
+    nav a.active {
+      background: var(--accent);
+      box-shadow: 0 0 15px rgba(255, 0, 79, 0.6);
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    .search-container {
+      display: flex;
+      max-width: 800px;
+      width: 100%;
+      margin: 20px auto;
+      gap: 10px;
+    }
+
+    .search-bar {
+      flex: 1;
+      display: flex;
+      border-radius: 50px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .search-bar input {
+      padding: 12px 20px;
+      border: none;
+      width: 100%;
+      outline: none;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .search-bar input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .search-bar button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0 25px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .search-bar button:hover {
+      background: #ff2261;
+    }
+
+    .filter-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0 30px;
+    }
+
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(255, 0, 79, 0.5);
+    }
+
+    .main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    h2 {
+      margin-top: 30px;
+      margin-bottom: 20px;
+      font-size: 26px;
+      color: var(--secondary);
+      border-bottom: 2px solid var(--secondary);
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    .book-card {
+      background-color: var(--card-bg);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .book-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(255, 0, 79, 0.78);
+      border-color: var(--accent);
+    }
+
+    .book-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .book-card h4 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ffccff;
+      margin-bottom: 5px;
+    }
+
+    .book-card p {
+      font-size: 14px;
+      color: #cccccc;
+      margin-bottom: 10px;
+      flex-grow: 1;
+    }
+
+    .book-card .meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #999;
+      margin-top: 5px;
+    }
+
+    .view-btn {
+      margin-top: 10px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 0;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .view-btn:hover {
+      background: #ff2261;
+      box-shadow: 0 0 15px rgba(255, 0, 79, 0.4);
+    }
+
+    /* Sticker Style */
+    .sticker {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    .sticker.new {
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(255, 0, 79, 0.8);
+    }
+
+    .sticker.upcoming {
+      background: var(--tertiary);
+      box-shadow: 0 0 10px rgba(124, 77, 255, 0.8);
+    }
+
+    .sticker.bestseller {
+      background: var(--secondary);
+      box-shadow: 0 0 10px rgba(0, 200, 170, 0.8);
+    }
+
+    /* Request Book Section */
+    .request-section {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 20px;
+      padding: 30px;
+      margin: 50px 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .request-section h2 {
+      text-align: center;
+      display: block;
+      margin-bottom: 25px;
+      font-size: 28px;
+      color: var(--primary);
+    }
+
+    .request-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group.full {
+      grid-column: span 2;
+    }
+
+    .form-group label {
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #ffccff;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.4);
+      color: white;
+      font-size: 16px;
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      grid-column: span 2;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 600;
+      transition: all 0.3s;
+      margin-top: 10px;
+    }
+
+    .submit-btn:hover {
+      background: #ff2261;
+      box-shadow: 0 0 20px rgba(255, 0, 79, 0.6);
+    }
+
+    .submit-btn i {
+      margin-right: 10px;
+    }
+
+    /* Footer */
+    footer {
+      background: rgba(0, 0, 0, 0.8);
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: 60px;
+      border-top: 1px solid var(--accent);
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      text-align: left;
+    }
+
+    .footer-section h3 {
+      color: var(--primary);
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-links a {
+      color: #ccc;
+      text-decoration: none;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-links a:hover {
+      color: var(--secondary);
+      transform: translateX(5px);
+    }
+
+    .copyright {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #999;
+    }
+
+    /* Not Found Section */
+    .not-found {
+      text-align: center;
+      margin: 40px auto;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 15px;
+      max-width: 600px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .not-found p {
+      font-size: 18px;
+      color: #ffccff;
+      margin-bottom: 20px;
+    }
+
+    .request-btn {
+      background: var(--tertiary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      margin: 10px 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .request-btn:hover {
+      background: #8a63ff;
+      box-shadow: 0 0 15px rgba(124, 77, 255, 0.5);
+    }
+
+    .reload-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      margin: 10px 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .reload-btn:hover {
+      background: #ff2261;
+      box-shadow: 0 0 15px rgba(255, 0, 79, 0.5);
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    /* Telegram Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(255, 0, 79, 0.5);
+      border: 2px solid var(--accent);
+      position: relative;
+    }
+
+    .modal-icon {
+      font-size: 60px;
+      color: #29b6f6;
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      font-size: 28px;
+      margin-bottom: 15px;
+      background: linear-gradient(to right, #29b6f6, #81d4fa);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .modal-warning {
+      color: #ff5252;
+      font-weight: 600;
+      margin: 20px 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .modal-warning i {
+      font-size: 24px;
+    }
+
+    .modal-text {
+      color: #e0e0e0;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    .join-btn {
+      background: linear-gradient(to right, #29b6f6, #039be5);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      margin: 10px 0;
+      box-shadow: 0 5px 15px rgba(41, 182, 246, 0.4);
+    }
+
+    .join-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(41, 182, 246, 0.6);
+    }
+
+    .close-btn {
+      background: transparent;
+      color: #ccc;
+      border: 1px solid #ccc;
+      padding: 10px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: all 0.3s;
+    }
+
+    .close-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    /* Admin Link */
+    .admin-link {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--accent);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 5px 15px rgba(255, 0, 79, 0.5);
+      z-index: 99;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+    }
+
+    .admin-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 0, 79, 0.7);
+    }
+
+    /* Responsive */
+    @media screen and (max-width: 900px) {
+      .request-form {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-group.full {
+        grid-column: span 1;
+      }
+      
+      .submit-btn {
+        grid-column: span 1;
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+      }
+      
+      nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .filter-container {
+        flex-wrap: wrap;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .books-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .filter-btn {
+        padding: 6px 12px;
+        font-size: 13px;
+      }
+      
+      .admin-link {
+        bottom: 10px;
+        right: 10px;
+        font-size: 14px;
+        padding: 8px 15px;
+      }
+    }
+    
+    /* Loading Spinner */
+    .spinner {
+      display: none;
+      margin: 20px auto;
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top: 5px solid var(--accent);
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <nav>
+    <div class="logo">
+      <i class="fas fa-fire"></i>
+      <span class="title">FireLEARN</span>
+    </div>
+    <ul>
+      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="books.html" class="active"><i class="fas fa-book"></i> All Books</a></li>
+      <li><a href="#request"><i class="fas fa-plus-circle"></i> Request Book</a></li>
+      <li><a href="coming-soon.html" onclick="showComingSoon()"><i class="fas fa-user-graduate"></i> Courses</a></li>
+    </ul>
+  </nav>
+
+  <header>
+    <h1 class="title">Explore Our Book Collection</h1>
+    <p>Download free educational resources for JEE, NEET, and CBSE exams</p>
+    
+    <div class="search-container">
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search books by title, author, subject, or tags..." />
+        <button onclick="searchBooks()"><i class="fas fa-search"></i> Search</button>
+      </div>
+    </div>
+    
+    <div class="filter-container">
+      <button class="filter-btn active" data-category="all"><i class="fas fa-layer-group"></i> All Books</button>
+      <button class="filter-btn" data-category="jee"><i class="fas fa-calculator"></i> JEE Prep</button>
+      <button class="filter-btn" data-category="neet"><i class="fas fa-dna"></i> NEET Prep</button>
+      <button class="filter-btn" data-category="class11"><i class="fas fa-book-open"></i> Class 11</button>
+      <button class="filter-btn" data-category="class12"><i class="fas fa-graduation-cap"></i> Class 12</button>
+    </div>
+  </header>
+
+  <div class="main">
+    <div class="spinner" id="loadingSpinner"></div>
+    
+    <h2>Featured Books</h2>
+    <div class="books-grid" id="featuredBooksGrid">
+      <!-- Featured books will be loaded here -->
+    </div>
+
+    <h2>All Books</h2>
+    <div class="books-grid" id="allBooksGrid">
+      <!-- All books will be loaded here -->
+    </div>
+
+    <!-- Book Not Found Section -->
+    <div id="notFound" class="not-found">
+      <i class="fas fa-book-open" style="font-size: 50px; margin-bottom: 20px; color: #ffccff;"></i>
+      <p>Book 📚 is not available in our collection!</p>
+      <div class="action-buttons">
+        <button class="request-btn" onclick="showRequestForm()">
+          <i class="fas fa-plus-circle"></i> Request This Book
+        </button>
+        <button class="reload-btn" onclick="location.reload()">
+          <i class="fas fa-sync-alt"></i> Reload Books
+        </button>
+      </div>
+      <p style="margin-top: 20px; font-size: 16px;">Can't find what you're looking for? Request it and we'll add it soon!</p>
+    </div>
+
+    <!-- Book Request Section -->
+    <div id="request" class="request-section">
+      <h2>Request a Book</h2>
+      <p style="text-align: center; margin-bottom: 25px; color: #ccc;">Can't find what you're looking for? Request a book and we'll add it to our collection!</p>
+      
+      <div class="request-form">
+        <div class="form-group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" placeholder="Enter your name" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="Enter your email" required>
+        </div>
+        
+        <div class="form-group full">
+          <label for="bookTitle">Book Title</label>
+          <input type="text" id="bookTitle" placeholder="Enter book title" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="author">Author/Publication</label>
+          <input type="text" id="author" placeholder="Author or publisher">
+        </div>
+        
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select id="category">
+            <option value="">Select category</option>
+            <option value="JEE">JEE Preparation</option>
+            <option value="NEET">NEET Preparation</option>
+            <option value="Class 11">Class 11</option>
+            <option value="Class 12">Class 12</option>
+            <option value="Reference">Reference Book</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        
+        <div class="form-group full">
+          <label for="message">Additional Information</label>
+          <textarea id="message" placeholder="Any additional details about the book..."></textarea>
+        </div>
+        
+        <button class="submit-btn" onclick="submitRequest()">
+          <i class="fab fa-telegram-plane"></i> Send Request to Admin
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Link -->
+  <a href="admin.html" class="admin-link">
+    <i class="fas fa-user-shield"></i> Admin Panel
+  </a>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>FireLEARN Books</h3>
+        <p>Providing free educational resources for competitive exam preparation since 2023.</p>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <div class="footer-links">
+          <a href="index.html"><i class="fas fa-home"></i> Home</a>
+          <a href="books.html"><i class="fas fa-book"></i> All Books</a>
+          <a href="#request"><i class="fas fa-plus-circle"></i> Request Book</a>
+          <a href="#" onclick="showComingSoon()"><i class="fas fa-question-circle"></i> FAQ</a>
+        </div>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Contact Us</h3>
+        <div class="footer-links">
+          <a href="mailto:support@firelearn.com"><i class="fas fa-envelope"></i> support@firelearn.com</a>
+          <a href="#" onclick="showTelegramModal()"><i class="fab fa-telegram"></i> Telegram Channel</a>
+          <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+          <a href="#"><i class="fab fa-youtube"></i> YouTube</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      <p>&copy; 2023 FireLEARN Books. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Telegram Modal -->
+  <div id="telegramModal" class="modal">
+    <div class="modal-content">
+      <i class="fab fa-telegram modal-icon"></i>
+      <h2 class="modal-title">Join Our Telegram Channel</h2>
+      <div class="modal-warning">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>WARNING: JOINING IS MANDATORY</span>
+      </div>
+      <p class="modal-text">
+        To continue using FireLEARN Books and avoid being banned from our platform, 
+        you must join our Telegram channel. This is where we post all new book updates, 
+        resources, and important announcements.
+      </p>
+      <p class="modal-text">
+        Failure to join will result in your account being suspended. 
+        Don't miss out on essential updates!
+      </p>
+      <a href="https://t.me/firelearnavailable" target="_blank" class="join-btn">
+        <i class="fab fa-telegram"></i> Join Telegram Channel
+      </a>
+      <p style="margin: 15px 0; color: #ccc; font-size: 14px;">
+        Already joined? <a href="#" onclick="closeModal()" style="color: var(--secondary);">Confirm here</a>
+      </p>
+      <button class="close-btn" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    // Firebase configuration (replace with your own)
+    const firebaseConfig = {
+      apiKey: "AIzaSyC4-SUORgyEUmgSxoZnEzDA-Lg5-_DSQDc",
+      authDomain: "firelearn-26811.firebaseapp.com",
+      projectId: "firelearn-26811",
+      storageBucket: "firelearn-26811.firebasestorage.app",
+      messagingSenderId: "109678045184",
+      appId: "1:109678045184:web:73e4305100b27c506590e5"
+    };
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    
+    // Initialize books from Firestore
+    function loadBooks() {
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      loadingSpinner.style.display = 'block';
+      
+      // Clear existing books
+      document.getElementById('featuredBooksGrid').innerHTML = '';
+      document.getElementById('allBooksGrid').innerHTML = '';
+      
+      db.collection("books").get()
+        .then((querySnapshot) => {
+          const books = [];
+          querySnapshot.forEach((doc) => {
+            books.push({ id: doc.id, ...doc.data() });
+          });
+          
+          // Filter featured books
+          const featuredBooks = books.filter(book => book.isFeatured);
+          const allBooks = books;
+          
+          // Render featured books
+          const featuredGrid = document.getElementById('featuredBooksGrid');
+          featuredBooks.forEach(book => {
+            featuredGrid.appendChild(createBookCard(book));
+          });
+          
+          // Render all books
+          const allBooksGrid = document.getElementById('allBooksGrid');
+          allBooks.forEach(book => {
+            allBooksGrid.appendChild(createBookCard(book));
+          });
+          
+          // Hide loading spinner
+          loadingSpinner.style.display = 'none';
+        })
+        .catch((error) => {
+          console.error("Error loading books: ", error);
+          alert("Failed to load books. Please try again later.");
+          loadingSpinner.style.display = 'none';
+        });
+    }
+    
+    // Create book card element
+    function createBookCard(book) {
+      const card = document.createElement('div');
+      card.className = 'book-card';
+      card.setAttribute('data-category', book.category);
+      card.setAttribute('data-tags', book.tags);
+      
+      let sticker = '';
+      if (book.sticker === 'new') {
+        sticker = '<div class="sticker new">New</div>';
+      } else if (book.sticker === 'bestseller') {
+        sticker = '<div class="sticker bestseller">Bestseller</div>';
+      } else if (book.sticker === 'upcoming') {
+        sticker = '<div class="sticker upcoming">Upcoming</div>';
+      }
+      
+      card.innerHTML = `
+        ${sticker}
+        <img src="${book.image}" alt="${book.title}" />
+        <h4>${book.title}</h4>
+        <p>${book.description}</p>
+        <div class="meta">
+          <span><i class="fas fa-book"></i> ${book.author}</span>
+          <span><i class="fas fa-file"></i> ${book.pages}</span>
+        </div>
+        <a href="${book.downloadLink}" download>
+          <button class="view-btn"><i class="fas fa-download"></i> Download</button>
+        </a>
+      `;
+      
+      return card;
+    }
+    
+    // Enhanced search functionality
+    function searchBooks() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const allCards = document.querySelectorAll(".book-card");
+      let found = false;
+      
+      allCards.forEach((card) => {
+        const title = card.querySelector("h4").textContent.toLowerCase();
+        const description = card.querySelector("p").textContent.toLowerCase();
+        const author = card.querySelector(".meta span:first-child").textContent.toLowerCase();
+        const pages = card.querySelector(".meta span:last-child").textContent.toLowerCase();
+        const tags = card.getAttribute('data-tags') || '';
+        const category = card.getAttribute('data-category') || '';
+        const sticker = card.querySelector(".sticker")?.textContent.toLowerCase() || '';
+        
+        // Search in all fields
+        if (title.includes(input) || 
+            description.includes(input) || 
+            author.includes(input) || 
+            pages.includes(input) || 
+            tags.includes(input) || 
+            category.includes(input) || 
+            sticker.includes(input) || 
+            input === "") {
+          card.style.display = "block";
+          found = true;
+        } else {
+          card.style.display = "none";
+        }
+      });
+      
+      // Show not found message if no results
+      document.getElementById("notFound").style.display = found ? "none" : "flex";
+    }
+    
+    // Category filtering
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Update active button
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const category = btn.dataset.category;
+        const books = document.querySelectorAll('.book-card');
+        
+        books.forEach(book => {
+          if (category === 'all' || book.dataset.category.includes(category)) {
+            book.style.display = 'block';
+          } else {
+            book.style.display = 'none';
+          }
+        });
+      });
+    });
+    
+    // Book request form submission to Telegram
+    function submitRequest() {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const bookTitle = document.getElementById('bookTitle').value;
+      const author = document.getElementById('author').value;
+      const category = document.getElementById('category').value;
+      const message = document.getElementById('message').value;
+      
+      if (!name || !email || !bookTitle) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      // Telegram Bot API integration
+      const botToken = '7626785042:AAGxjPXvFe4FZO2twQppz7JcSi_Ko6UANhw'; // Replace with your bot token
+      const chatId = '-1002898308491';    // Replace with your channel chat ID
+      
+      const text = `📚 *New Book Request* 📚
+      
+*Name:* ${name}
+*Email:* ${email}
+*Book Title:* ${bookTitle}
+*Author/Publication:* ${author || 'Not specified'}
+*Category:* ${category || 'Not specified'}
+*Message:*
+${message || 'No additional message'}`;
+      
+      const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}&parse_mode=Markdown`;
+      
+      // Show loading state
+      const submitBtn = document.querySelector('.submit-btn');
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending Request...';
+      submitBtn.disabled = true;
+      
+      // Send request to Telegram
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.ok) {
+            alert('Your request has been sent successfully! We\'ll notify you when the book is available.');
+            // Reset form
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('bookTitle').value = '';
+            document.getElementById('author').value = '';
+            document.getElementById('category').value = '';
+            document.getElementById('message').value = '';
+          } else {
+            alert('Failed to send request. Please try again later.');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('An error occurred. Please try again later.');
+        })
+        .finally(() => {
+          submitBtn.innerHTML = '<i class="fab fa-telegram-plane"></i> Send Request to Admin';
+          submitBtn.disabled = false;
+        });
+    }
+    
+    // Telegram modal functions
+    function showTelegramModal() {
+      document.getElementById("telegramModal").style.display = "flex";
+    }
+    
+    function closeModal() {
+      document.getElementById("telegramModal").style.display = "none";
+    }
+    
+    // Show modal after 3 seconds
+    setTimeout(() => {
+      showTelegramModal();
+    }, 3000);
+    
+    // Request book form
+    function showRequestForm() {
+      document.getElementById('request').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // Coming soon alert
+    function showComingSoon() {
+      alert("New features coming soon! Stay tuned to our Telegram channel for updates.");
+      showTelegramModal();
+    }
+    
+    // Initialize search on input
+    document.getElementById("searchInput").addEventListener("input", searchBooks);
+    
+    // Initialize books on page load
+    window.onload = function() {
+      loadBooks();
+    };
+  </script>
+</body>
+
+</html>
