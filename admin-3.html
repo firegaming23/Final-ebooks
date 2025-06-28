@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - FireLEARN Books</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #ff7700;
+      --secondary: #00c8aa;
+      --tertiary: #7c4dff;
+      --dark: #121212;
+      --light: #f8f9fa;
+      --gray: #495057;
+      --card-bg: #1a1a1a;
+      --card-hover: #252525;
+      --accent: #ff004f;
+      --success: #00c853;
+      --warning: #ffab00;
+      --error: #ff5252;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: white;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .admin-login {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .login-container {
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 20px;
+      padding: 40px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 0 30px rgba(255, 0, 79, 0.5);
+      border: 2px solid var(--accent);
+      transform: translateY(0);
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+      animation: pulse 3s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 0, 79, 0.5); }
+      70% { box-shadow: 0 0 0 15px rgba(255, 0, 79, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 0, 79, 0); }
+    }
+
+    .login-container h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      background: linear-gradient(120deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #ffccff;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.4);
+      color: white;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(255, 119, 0, 0.3);
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(to right, var(--accent), #ff2261);
+      color: white;
+      border: none;
+      padding: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 600;
+      transition: all 0.3s;
+      margin-top: 10px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .submit-btn::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 20px;
+      height: 200%;
+      background: rgba(255,255,255,0.3);
+      transform: rotate(30deg);
+      transition: all 0.6s;
+    }
+
+    .submit-btn:hover {
+      box-shadow: 0 0 20px rgba(255, 0, 79, 0.6);
+    }
+
+    .submit-btn:hover::after {
+      left: 120%;
+    }
+
+    .admin-dashboard {
+      display: none;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      opacity: 0;
+      animation: fadeIn 0.8s forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--secondary);
+    }
+
+    .dashboard-header h1 {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 2.2rem;
+    }
+
+    .logout-btn {
+      background: linear-gradient(to right, var(--tertiary), #8a63ff);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logout-btn:hover {
+      box-shadow: 0 0 15px rgba(124, 77, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .books-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+      background: var(--card-bg);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .books-table th, .books-table td {
+      padding: 14px 18px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .books-table th {
+      background: rgba(255, 0, 79, 0.2);
+      color: #ffccff;
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+
+    .books-table tr {
+      transition: all 0.3s ease;
+    }
+
+    .books-table tr:hover {
+      background: var(--card-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .action-btn {
+      background: transparent;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin: 0 5px;
+      font-size: 18px;
+      transition: all 0.3s;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .edit-btn {
+      background: rgba(0, 200, 170, 0.2);
+      color: var(--secondary);
+    }
+
+    .delete-btn {
+      background: rgba(255, 0, 79, 0.2);
+      color: var(--accent);
+    }
+
+    .action-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 8px rgba(255,255,255,0.2);
+    }
+
+    .add-book-form {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 20px;
+      padding: 30px;
+      margin-top: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.4s ease;
+    }
+
+    .add-book-form:hover {
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .add-book-form h2 {
+      margin-bottom: 20px;
+      color: var(--primary);
+      font-size: 24px;
+      border-bottom: 2px solid var(--primary);
+      display: inline-block;
+      padding-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+
+    .form-group.full {
+      grid-column: span 2;
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.4);
+      color: white;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(255, 119, 0, 0.3);
+    }
+
+    .form-group select {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.4);
+      color: white;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(255, 119, 0, 0.3);
+    }
+
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 25px 20px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.4s ease;
+      cursor: pointer;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .stat-card i {
+      font-size: 42px;
+      margin-bottom: 15px;
+      transition: all 0.4s ease;
+    }
+
+    .stat-card:hover i {
+      transform: scale(1.1);
+    }
+
+    .stat-card .number {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: linear-gradient(120deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: all 0.4s ease;
+    }
+
+    .stat-card:hover .number {
+      transform: scale(1.05);
+    }
+
+    .stat-card .label {
+      color: #ccc;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .book-1 { color: var(--primary); }
+    .book-2 { color: var(--secondary); }
+    .book-3 { color: var(--tertiary); }
+    .book-4 { color: var(--accent); }
+
+    .notification-btn {
+      background: linear-gradient(to right, #007bff, #0056b3);
+      color: white;
+      border: none;
+      padding: 14px 25px;
+      border-radius: 10px;
+      font-size: 17px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .notification-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    }
+    
+    .spinner {
+      display: none;
+      margin: 20px auto;
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top: 5px solid var(--accent);
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .error-message {
+      color: #ff5252;
+      text-align: center;
+      margin-top: 10px;
+      font-weight: 500;
+      padding: 10px;
+      border-radius: 8px;
+      background: rgba(255, 82, 82, 0.1);
+      border: 1px solid rgba(255, 82, 82, 0.3);
+    }
+
+    .success-message {
+      color: var(--success);
+      text-align: center;
+      margin-top: 10px;
+      font-weight: 500;
+      padding: 10px;
+      border-radius: 8px;
+      background: rgba(0, 200, 83, 0.1);
+      border: 1px solid rgba(0, 200, 83, 0.3);
+    }
+    
+    .admin-info {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      border-left: 4px solid var(--accent);
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .reset-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .reset-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .featured-badge {
+      background: rgba(0, 200, 170, 0.2);
+      color: var(--secondary);
+    }
+
+    .regular-badge {
+      background: rgba(124, 77, 255, 0.2);
+      color: var(--tertiary);
+    }
+
+    /* Responsive styles */
+    @media (max-width: 992px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-group.full {
+        grid-column: span 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .login-container {
+        padding: 30px 20px;
+      }
+      
+      .dashboard-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+      
+      .books-table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .notification-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    .welcome-message {
+      text-align: center;
+      margin: 25px 0;
+      font-size: 1.2rem;
+      color: #ddd;
+    }
+
+    .welcome-message span {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(120deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* New styles for search and logs */
+    .search-container {
+      position: relative;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 15px;
+    }
+    
+    #bookSearch {
+      flex: 1;
+      padding: 14px 20px 14px 50px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.4);
+      color: white;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    #bookSearch:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 2px rgba(0, 200, 170, 0.3);
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--secondary);
+    }
+    
+    .admin-logs {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 20px;
+      padding: 30px;
+      margin-top: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .admin-logs h2 {
+      margin-bottom: 20px;
+      color: var(--tertiary);
+      font-size: 24px;
+      border-bottom: 2px solid var(--tertiary);
+      display: inline-block;
+      padding-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .log-entry {
+      padding: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .log-entry:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+    }
+    
+    .log-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #ccc;
+    }
+    
+    .log-admin {
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    .log-action {
+      font-size: 16px;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .log-details {
+      color: #aaa;
+      font-size: 14px;
+      padding-left: 26px;
+      margin-top: 5px;
+    }
+    
+    .log-action i {
+      width: 24px;
+      text-align: center;
+    }
+    
+    .log-book {
+      background: rgba(124, 77, 255, 0.1);
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin: 0 4px;
+    }
+    
+    .dashboard-tabs {
+      display: flex;
+      margin-bottom: 25px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .tab-btn {
+      padding: 12px 25px;
+      background: transparent;
+      border: none;
+      color: #aaa;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .tab-btn.active {
+      color: white;
+    }
+    
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--secondary);
+      border-radius: 3px 3px 0 0;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .no-results {
+      text-align: center;
+      padding: 30px;
+      color: #aaa;
+      font-style: italic;
+    }
+    
+    /* Animation for form reset */
+    @keyframes fadeReset {
+      0% { background-color: rgba(255,255,255,0.1); }
+      50% { background-color: rgba(255,255,255,0.3); }
+      100% { background-color: rgba(255,255,255,0.1); }
+    }
+    
+    .reset-animation {
+      animation: fadeReset 0.5s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-login" id="loginSection">
+    <div class="login-container">
+      <div class="logo-container">
+        <div class="logo">
+          <i class="fas fa-book-open"></i>
+          FireLEARN Books
+        </div>
+      </div>
+      <h1><i class="fas fa-lock"></i> Admin Login</h1>
+      <div class="form-group">
+        <label for="adminEmail"><i class="fas fa-envelope"></i> Email</label>
+        <input type="email" id="adminEmail" placeholder="admin@example.com" required>
+      </div>
+      <div class="form-group">
+        <label for="adminPassword"><i class="fas fa-key"></i> Password</label>
+        <input type="password" id="adminPassword" placeholder="••••••••" required>
+      </div>
+      <button class="submit-btn" id="loginButton" type="button">
+        <i class="fas fa-sign-in-alt"></i> Login to Dashboard
+      </button>
+      <div id="loginError" class="error-message"></div>
+      <div class="admin-info">
+        <i class="fas fa-info-circle"></i>
+        <p>Use the email and password you added in Firebase Authentication</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-dashboard" id="adminDashboard">
+    <div class="dashboard-header">
+      <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+      <button class="logout-btn" id="logoutButton" type="button">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </div>
+    
+    <div class="welcome-message">
+      Welcome back, <span id="adminName">Administrator</span>! Last login: <span id="lastLogin">Today</span>
+    </div>
+    
+    <button class="notification-btn" onclick="location.href='admin-noti.html'">
+      <i class="fas fa-bell"></i> Control Notifications
+    </button>
+    
+    <div class="stats-container">
+      <div class="stat-card">
+        <i class="fas fa-book book-1"></i>
+        <div class="number" id="totalBooks">0</div>
+        <div class="label">Total Books</div>
+      </div>
+      
+      <div class="stat-card">
+        <i class="fas fa-star book-2"></i>
+        <div class="number" id="featuredBooks">0</div>
+        <div class="label">Featured Books</div>
+      </div>
+      
+      <div class="stat-card">
+        <i class="fas fa-download book-3"></i>
+        <div class="number" id="downloads">0</div>
+        <div class="label">Total Downloads</div>
+      </div>
+      
+      <div class="stat-card">
+        <i class="fas fa-users book-4"></i>
+        <div class="number" id="activeUsers">0</div>
+        <div class="label">Active Users</div>
+      </div>
+    </div>
+    
+    <div class="dashboard-tabs">
+      <button class="tab-btn active" data-tab="books-tab" type="button">Manage Books</button>
+      <button class="tab-btn" data-tab="logs-tab" type="button">Admin Activity Logs</button>
+    </div>
+    
+    <!-- Books Tab -->
+    <div class="tab-content active" id="books-tab">
+      <div class="form-header">
+        <h2><i class="fas fa-book"></i> Manage Books</h2>
+        <div style="display: flex; gap: 15px; align-items: center;">
+          <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="bookSearch" placeholder="Search books by title, author, category...">
+          </div>
+          <button class="reset-btn" id="resetButton" type="button">
+            <i class="fas fa-sync"></i> Reset Form
+          </button>
+        </div>
+      </div>
+      
+      <div class="spinner" id="loadingSpinner"></div>
+      
+      <table class="books-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="bookTableBody">
+          <!-- Books will be populated here -->
+        </tbody>
+      </table>
+
+      <div class="add-book-form" id="bookForm">
+        <h2><i class="fas fa-plus-circle"></i> Add New Book</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="addTitle"><i class="fas fa-heading"></i> Title</label>
+            <input type="text" id="addTitle" placeholder="Book title" required>
+          </div>
+          <div class="form-group">
+            <label for="addAuthor"><i class="fas fa-user"></i> Author/Publication</label>
+            <input type="text" id="addAuthor" placeholder="Author or publisher" required>
+          </div>
+          <div class="form-group">
+            <label for="addImage"><i class="fas fa-image"></i> Image URL</label>
+            <input type="text" id="addImage" placeholder="Image URL" required>
+          </div>
+          <div class="form-group">
+            <label for="addPages"><i class="fas fa-file"></i> Pages/Volumes</label>
+            <input type="text" id="addPages" placeholder="e.g., 300 Pages or 2 Volumes" required>
+          </div>
+          <div class="form-group">
+            <label for="addCategory"><i class="fas fa-tag"></i> Category</label>
+            <input type="text" id="addCategory" placeholder="e.g., jee class11" required>
+          </div>
+          <div class="form-group">
+            <label for="addTags"><i class="fas fa-tags"></i> Tags</label>
+            <input type="text" id="addTags" placeholder="Comma separated tags">
+          </div>
+          <div class="form-group">
+            <label for="addSticker"><i class="fas fa-certificate"></i> Sticker (optional)</label>
+            <select id="addSticker">
+              <option value="">None</option>
+              <option value="new">New</option>
+              <option value="bestseller">Bestseller</option>
+              <option value="upcoming">Upcoming</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="addFeatured"><i class="fas fa-star"></i> Featured</label>
+            <select id="addFeatured">
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="addDownloadLink"><i class="fas fa-download"></i> Download Link</label>
+            <input type="text" id="addDownloadLink" placeholder="Download link" required>
+          </div>
+          <div class="form-group full">
+            <label for="addDescription"><i class="fas fa-align-left"></i> Description</label>
+            <textarea id="addDescription" placeholder="Book description" required></textarea>
+          </div>
+          <div class="form-group full">
+            <button class="submit-btn" id="addBookBtn" type="button"><i class="fas fa-plus-circle"></i> Add Book</button>
+            <div id="formMessage"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Admin Logs Tab -->
+    <div class="tab-content" id="logs-tab">
+      <div class="admin-logs">
+        <h2><i class="fas fa-history"></i> Admin Activity Logs</h2>
+        <div id="logsContainer">
+          <div class="spinner" id="logsSpinner"></div>
+          <!-- Logs will be populated here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+  
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyC4-SUORgyEUmgSxoZnEzDA-Lg5-_DSQDc",
+      authDomain: "firelearn-26811.firebaseapp.com",
+      projectId: "firelearn-26811",
+      storageBucket: "firelearn-26811.appspot.com",
+      messagingSenderId: "109678045184",
+      appId: "1:109678045184:web:73e4305100b27c506590e5"
+    };
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    
+    // DOM Elements
+    const loginSection = document.getElementById('loginSection');
+    const adminDashboard = document.getElementById('adminDashboard');
+    const loginButton = document.getElementById('loginButton');
+    const logoutButton = document.getElementById('logoutButton');
+    const resetButton = document.getElementById('resetButton');
+    const addBookBtn = document.getElementById('addBookBtn');
+    const bookTableBody = document.getElementById('bookTableBody');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const loginError = document.getElementById('loginError');
+    const adminName = document.getElementById('adminName');
+    const lastLogin = document.getElementById('lastLogin');
+    const formMessage = document.getElementById('formMessage');
+    const bookSearch = document.getElementById('bookSearch');
+    const logsContainer = document.getElementById('logsContainer');
+    const logsSpinner = document.getElementById('logsSpinner');
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const bookForm = document.getElementById('bookForm');
+    
+    // Check if admin is logged in
+    function checkAdminLogin() {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          // User is signed in
+          loginSection.style.display = 'none';
+          adminDashboard.style.display = 'block';
+          adminName.textContent = user.email.split('@')[0];
+          lastLogin.textContent = new Date().toLocaleString();
+          loadBooks();
+          updateStats();
+          logAdminEvent('login');
+        } else {
+          // User is signed out
+          loginSection.style.display = 'flex';
+          adminDashboard.style.display = 'none';
+        }
+      });
+    }
+    
+    // Admin login function
+    function adminLogin() {
+      const email = document.getElementById('adminEmail').value;
+      const password = document.getElementById('adminPassword').value;
+      
+      loginError.textContent = '';
+      
+      const originalText = loginButton.innerHTML;
+      loginButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
+      loginButton.disabled = true;
+      
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(() => {
+          // Login successful - handled by onAuthStateChanged
+        })
+        .catch((error) => {
+          // Handle errors
+          let errorMessage = "Login failed: ";
+          switch (error.code) {
+            case "auth/invalid-email":
+              errorMessage += "Invalid email format";
+              break;
+            case "auth/user-disabled":
+              errorMessage += "Account disabled";
+              break;
+            case "auth/user-not-found":
+              errorMessage += "User not found";
+              break;
+            case "auth/wrong-password":
+              errorMessage += "Incorrect password";
+              break;
+            default:
+              errorMessage += error.message;
+          }
+          loginError.textContent = errorMessage;
+          loginError.style.display = 'block';
+        })
+        .finally(() => {
+          loginButton.innerHTML = originalText;
+          loginButton.disabled = false;
+        });
+    }
+    
+    // Admin logout
+    function adminLogout() {
+      logAdminEvent('logout');
+      firebase.auth().signOut()
+        .then(() => {
+          window.location.reload();
+        });
+    }
+    
+    // Log admin event to Firestore
+    function logAdminEvent(action, bookDetails = null) {
+      const admin = firebase.auth().currentUser;
+      if (!admin) return; // not logged in
+      
+      const logData = {
+        adminEmail: admin.email,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        action: action
+      };
+      
+      if (bookDetails) {
+        logData.bookId = bookDetails.id;
+        logData.bookTitle = bookDetails.title;
+      }
+      
+      db.collection("admin_logs").add(logData)
+        .then(() => {
+          // Refresh logs when new event is added
+          if (document.querySelector('#logs-tab').classList.contains('active')) {
+            loadAdminLogs();
+          }
+        })
+        .catch(error => console.error("Error logging event: ", error));
+    }
+    
+    // Load admin logs
+    function loadAdminLogs() {
+      logsSpinner.style.display = 'block';
+      logsContainer.innerHTML = '';
+      
+      db.collection("admin_logs")
+        .orderBy("timestamp", "desc")
+        .limit(50)
+        .get()
+        .then((querySnapshot) => {
+          logsSpinner.style.display = 'none';
+          
+          if (querySnapshot.empty) {
+            logsContainer.innerHTML = '<div class="no-results">No activity logs found</div>';
+            return;
+          }
+          
+          querySnapshot.forEach((doc) => {
+            const log = doc.data();
+            const logElement = document.createElement('div');
+            logElement.className = 'log-entry';
+            
+            const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleString() : 'Unknown time';
+            
+            let actionHTML = '';
+            let detailsHTML = '';
+            
+            switch(log.action) {
+              case 'login':
+                actionHTML = `<i class="fas fa-sign-in-alt"></i> Logged in to dashboard`;
+                break;
+              case 'logout':
+                actionHTML = `<i class="fas fa-sign-out-alt"></i> Logged out`;
+                break;
+              case 'add':
+                actionHTML = `<i class="fas fa-plus-circle"></i> Added new book`;
+                detailsHTML = `<div class="log-details">Book: <span class="log-book">${log.bookTitle}</span> (ID: ${log.bookId})</div>`;
+                break;
+              case 'update':
+                actionHTML = `<i class="fas fa-edit"></i> Updated book`;
+                detailsHTML = `<div class="log-details">Book: <span class="log-book">${log.bookTitle}</span> (ID: ${log.bookId})</div>`;
+                break;
+              case 'delete':
+                actionHTML = `<i class="fas fa-trash"></i> Deleted book`;
+                detailsHTML = `<div class="log-details">Book ID: ${log.bookId}</div>`;
+                break;
+              default:
+                actionHTML = log.action;
+            }
+            
+            logElement.innerHTML = `
+              <div class="log-header">
+                <span class="log-admin">${log.adminEmail}</span>
+                <span class="log-time">${time}</span>
+              </div>
+              <div class="log-action">${actionHTML}</div>
+              ${detailsHTML}
+            `;
+            
+            logsContainer.appendChild(logElement);
+          });
+        })
+        .catch((error) => {
+          logsSpinner.style.display = 'none';
+          console.error("Error loading logs: ", error);
+          let errorMessage = "Failed to load activity logs.";
+          if (error.code === 'failed-precondition') {
+            errorMessage = "Failed to load logs: Missing Firestore index. Please create it in the Firebase console.";
+          } else if (error.code === 'permission-denied') {
+            errorMessage = "Permission denied. Please check Firestore rules.";
+          }
+          logsContainer.innerHTML = `<div class="error-message">${errorMessage}</div>`;
+        });
+    }
+    
+    // Load books for admin
+    function loadBooks() {
+      loadingSpinner.style.display = 'block';
+      bookTableBody.innerHTML = '';
+      
+      // Fetch books from Firestore
+      db.collection("books").get()
+        .then((querySnapshot) => {
+          if (querySnapshot.empty) {
+            bookTableBody.innerHTML = '<tr><td colspan="6" class="no-results">No books found</td></tr>';
+            loadingSpinner.style.display = 'none';
+            return;
+          }
+          
+          querySnapshot.forEach((doc) => {
+            const book = doc.data();
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${doc.id}</td>
+              <td>${book.title}</td>
+              <td>${book.author}</td>
+              <td>${book.category}</td>
+              <td>${book.isFeatured ? '<span class="status-badge featured-badge">Featured</span>' : '<span class="status-badge regular-badge">Regular</span>'}</td>
+              <td>
+                <button class="action-btn edit-btn" onclick="editBook('${doc.id}')"><i class="fas fa-edit"></i></button>
+                <button class="action-btn delete-btn" onclick="deleteBook('${doc.id}', '${book.title}')"><i class="fas fa-trash"></i></button>
+              </td>
+            `;
+            bookTableBody.appendChild(row);
+          });
+          loadingSpinner.style.display = 'none';
+          updateStats();
+        })
+        .catch((error) => {
+          console.error("Error loading books: ", error);
+          loadingSpinner.style.display = 'none';
+          showFormMessage('Failed to load books. Please try again later.', 'error');
+        });
+    }
+    
+    // Update stats
+    function updateStats() {
+      // Fetch stats from Firestore
+      db.collection("books").get()
+        .then((querySnapshot) => {
+          const totalBooks = querySnapshot.size;
+          const featuredBooks = querySnapshot.docs.filter(doc => doc.data().isFeatured).length;
+          
+          document.getElementById('totalBooks').textContent = totalBooks;
+          document.getElementById('featuredBooks').textContent = featuredBooks;
+          document.getElementById('downloads').textContent = Math.floor(Math.random() * 10000) + 5000;
+          document.getElementById('activeUsers').textContent = Math.floor(Math.random() * 500) + 200;
+        })
+        .catch((error) => {
+          console.error("Error loading stats: ", error);
+        });
+    }
+    
+    // Add new book
+    function addBook() {
+      formMessage.textContent = '';
+      formMessage.className = '';
+      
+      const title = document.getElementById('addTitle').value;
+      if (!title) {
+        showFormMessage('Title is required', 'error');
+        return;
+      }
+      
+      // Create new book object
+      const newBook = {
+        title: title,
+        author: document.getElementById('addAuthor').value,
+        image: document.getElementById('addImage').value,
+        pages: document.getElementById('addPages').value,
+        category: document.getElementById('addCategory').value,
+        tags: document.getElementById('addTags').value,
+        sticker: document.getElementById('addSticker').value,
+        isFeatured: document.getElementById('addFeatured').value === 'true',
+        downloadLink: document.getElementById('addDownloadLink').value,
+        description: document.getElementById('addDescription').value,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      
+      // Add to Firestore
+      db.collection("books").add(newBook)
+        .then((docRef) => {
+          showFormMessage('Book added successfully!', 'success');
+          resetForm(true);
+          loadBooks();
+          logAdminEvent('add', { id: docRef.id, title: title });
+        })
+        .catch((error) => {
+          console.error("Error adding book: ", error);
+          showFormMessage('Failed to add book. Please try again.', 'error');
+        });
+    }
+    
+    function showFormMessage(message, type) {
+      formMessage.textContent = message;
+      formMessage.className = type === 'error' ? 'error-message' : 'success-message';
+    }
+    
+    // Reset form
+    function resetForm(animate = false) {
+      document.getElementById('addTitle').value = '';
+      document.getElementById('addAuthor').value = '';
+      document.getElementById('addImage').value = '';
+      document.getElementById('addPages').value = '';
+      document.getElementById('addCategory').value = '';
+      document.getElementById('addTags').value = '';
+      document.getElementById('addSticker').value = '';
+      document.getElementById('addFeatured').value = 'true';
+      document.getElementById('addDownloadLink').value = '';
+      document.getElementById('addDescription').value = '';
+      
+      formMessage.textContent = '';
+      formMessage.className = '';
+      
+      addBookBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Add Book';
+      addBookBtn.onclick = addBook;
+      
+      if (animate) {
+        // Add animation effect
+        bookForm.classList.remove('reset-animation');
+        void bookForm.offsetWidth; // Trigger reflow
+        bookForm.classList.add('reset-animation');
+      }
+    }
+    
+    // Edit book
+    function editBook(bookId) {
+      db.collection("books").doc(bookId).get()
+        .then((doc) => {
+          if (doc.exists) {
+            const book = doc.data();
+            
+            document.getElementById('addTitle').value = book.title;
+            document.getElementById('addAuthor').value = book.author;
+            document.getElementById('addImage').value = book.image;
+            document.getElementById('addPages').value = book.pages;
+            document.getElementById('addCategory').value = book.category;
+            document.getElementById('addTags').value = book.tags || '';
+            document.getElementById('addSticker').value = book.sticker || '';
+            document.getElementById('addFeatured').value = book.isFeatured ? 'true' : 'false';
+            document.getElementById('addDownloadLink').value = book.downloadLink;
+            document.getElementById('addDescription').value = book.description;
+            
+            addBookBtn.innerHTML = '<i class="fas fa-save"></i> Update Book';
+            addBookBtn.onclick = function() {
+              updateBook(bookId, book.title);
+            };
+            
+            document.querySelector('.add-book-form').scrollIntoView({ behavior: 'smooth' });
+          } else {
+            showFormMessage('Book not found!', 'error');
+          }
+        })
+        .catch((error) => {
+          console.error("Error getting book: ", error);
+          showFormMessage('Failed to load book details. Please try again.', 'error');
+        });
+    }
+    
+    // CORRECTED UPDATE BOOK FUNCTION
+    function updateBook(bookId, originalTitle) {
+      const title = document.getElementById('addTitle').value;
+      if (!title) {
+        showFormMessage('Title is required', 'error');
+        return;
+      }
+      
+      // Disable button during update
+      const originalButtonHtml = addBookBtn.innerHTML;
+      addBookBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+      addBookBtn.disabled = true;
+      
+      const updatedBook = {
+        title: title,
+        author: document.getElementById('addAuthor').value,
+        image: document.getElementById('addImage').value,
+        pages: document.getElementById('addPages').value,
+        category: document.getElementById('addCategory').value,
+        tags: document.getElementById('addTags').value,
+        sticker: document.getElementById('addSticker').value,
+        isFeatured: document.getElementById('addFeatured').value === 'true',
+        downloadLink: document.getElementById('addDownloadLink').value,
+        description: document.getElementById('addDescription').value,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      
+      // CORRECTED: Use update() instead of set()
+      db.collection("books").doc(bookId).update(updatedBook)
+        .then(() => {
+          showFormMessage('Book updated successfully!', 'success');
+          resetForm(true);
+          loadBooks();
+          logAdminEvent('update', { id: bookId, title: updatedBook.title || originalTitle });
+        })
+        .catch((error) => {
+          console.error("Error updating book: ", error);
+          showFormMessage('Failed to update book. Please try again.', 'error');
+        })
+        .finally(() => {
+          // Re-enable button
+          addBookBtn.innerHTML = originalButtonHtml;
+          addBookBtn.disabled = false;
+        });
+    }
+    
+    // Delete book
+    function deleteBook(bookId, bookTitle = '') {
+      if (confirm(`Are you sure you want to delete book ${bookId}? This action cannot be undone.`)) {
+        db.collection("books").doc(bookId).delete()
+          .then(() => {
+            showFormMessage(`Book ${bookId} deleted successfully!`, 'success');
+            loadBooks();
+            logAdminEvent('delete', { id: bookId, title: bookTitle });
+          })
+          .catch((error) => {
+            console.error("Error deleting book: ", error);
+            showFormMessage('Failed to delete book. Please try again.', 'error');
+          });
+      }
+    }
+    
+    // Search books
+    function searchBooks() {
+      const searchTerm = bookSearch.value.toLowerCase().trim();
+      const rows = bookTableBody.querySelectorAll('tr');
+      
+      let foundResults = false;
+      
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        let found = false;
+        
+        // Skip the actions cell (last one)
+        for (let i = 0; i < cells.length - 1; i++) {
+          if (cells[i].textContent.toLowerCase().includes(searchTerm)) {
+            found = true;
+            foundResults = true;
+            break;
+          }
+        }
+        
+        row.style.display = found ? '' : 'none';
+      });
+      
+      // Show no results message if needed
+      if (!foundResults) {
+        const noResultsRow = document.createElement('tr');
+        noResultsRow.innerHTML = `<td colspan="6" class="no-results">No books match your search</td>`;
+        bookTableBody.appendChild(noResultsRow);
+      }
+    }
+    
+    // Tab switching
+    function switchTab(tabId) {
+      // Hide all tab contents
+      tabContents.forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Deactivate all tab buttons
+      tabButtons.forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Show selected tab content
+      document.getElementById(tabId).classList.add('active');
+      
+      // Activate selected tab button
+      document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add('active');
+      
+      // Load logs if needed
+      if (tabId === 'logs-tab') {
+        loadAdminLogs();
+      }
+    }
+    
+    // Initialize event listeners
+    loginButton.addEventListener('click', adminLogin);
+    logoutButton.addEventListener('click', adminLogout);
+    resetButton.addEventListener('click', () => resetForm(true));
+    addBookBtn.addEventListener('click', addBook);
+    bookSearch.addEventListener('input', searchBooks);
+    
+    // Tab switching
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        switchTab(btn.dataset.tab);
+      });
+    });
+    
+    // Initialize admin page
+    checkAdminLogin();
+  </script>
+</body>
+</html>
