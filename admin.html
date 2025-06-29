@@ -1195,48 +1195,52 @@
     
     // Add new book
     function addBook() {
-      formMessage.textContent = '';
-      formMessage.className = '';
-      
-      const title = document.getElementById('addTitle').value;
-      if (!title) {
-        showFormMessage('Title is required', 'error');
-        return;
-      }
-      
-      // Create new book object
-      const newBook = {
-        title: title,
-        author: document.getElementById('addAuthor').value,
-        image: document.getElementById('addImage').value,
-        pages: document.getElementById('addPages').value,
-        category: document.getElementById('addCategory').value,
-        tags: document.getElementById('addTags').value,
-        sticker: document.getElementById('addSticker').value,
-        isFeatured: document.getElementById('addFeatured').value === 'true',
-        downloadLink: document.getElementById('addDownloadLink').value,
-        description: document.getElementById('addDescription').value,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      };
-      
-      // Add to Firestore
-      db.collection("books").add(newBook)
-        .then((docRef) => {
-          showFormMessage('Book added successfully!', 'success');
-          resetForm(true);
-          loadBooks();
-          logAdminEvent('add', { id: docRef.id, title: title });
-        })
-        .catch((error) => {
-          console.error("Error adding book: ", error);
-          showFormMessage('Failed to add book. Please try again.', 'error');
-        });
-    }
-    
-    function showFormMessage(message, type) {
-      formMessage.textContent = message;
-      formMessage.className = type === 'error' ? 'error-message' : 'success-message';
-    }
+  formMessage.textContent = '';
+  formMessage.className = '';
+
+  const title = document.getElementById('addTitle').value;
+  if (!title) {
+    showFormMessage('Title is required', 'error');
+    return;
+  }
+
+  // 🔒 Disable button immediately to prevent double-click
+  const originalButtonHtml = addBookBtn.innerHTML;
+  addBookBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+  addBookBtn.disabled = true;
+
+  // Create new book object
+  const newBook = {
+    title: title,
+    author: document.getElementById('addAuthor').value,
+    image: document.getElementById('addImage').value,
+    pages: document.getElementById('addPages').value,
+    category: document.getElementById('addCategory').value,
+    tags: document.getElementById('addTags').value,
+    sticker: document.getElementById('addSticker').value,
+    isFeatured: document.getElementById('addFeatured').value === 'true',
+    downloadLink: document.getElementById('addDownloadLink').value,
+    description: document.getElementById('addDescription').value,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  db.collection("books").add(newBook)
+    .then((docRef) => {
+      showFormMessage('Book added successfully!', 'success');
+      resetForm(true);
+      loadBooks();
+      logAdminEvent('add', { id: docRef.id, title: title });
+    })
+    .catch((error) => {
+      console.error("Error adding book: ", error);
+      showFormMessage('Failed to add book. Please try again.', 'error');
+    })
+    .finally(() => {
+      // ✅ Re-enable button after process
+      addBookBtn.innerHTML = originalButtonHtml;
+      addBookBtn.disabled = false;
+    });
+}
     
     // Reset form
     function resetForm(animate = false) {
