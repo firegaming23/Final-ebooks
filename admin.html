@@ -1287,9 +1287,18 @@
             document.getElementById('addDescription').value = book.description;
             
             addBookBtn.innerHTML = '<i class="fas fa-save"></i> Update Book';
-            addBookBtn.onclick = function() {
-              updateBook(bookId, book.title);
-            };
+
+// Remove existing click listener (if any)
+const newBtn = addBookBtn.cloneNode(true);
+addBookBtn.parentNode.replaceChild(newBtn, addBookBtn);
+
+// Now safely assign update handler
+newBtn.onclick = function() {
+  updateBook(bookId, book.title);
+};
+
+// Also update global reference if needed
+window.addBookBtn = newBtn;
             
             document.querySelector('.add-book-form').scrollIntoView({ behavior: 'smooth' });
           } else {
